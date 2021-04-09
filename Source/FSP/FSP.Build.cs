@@ -38,6 +38,7 @@ public class FSP : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"BrainvrUnrealFramework",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
