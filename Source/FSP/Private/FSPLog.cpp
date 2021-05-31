@@ -12,10 +12,9 @@ bool UFSPLog::CreateFile(const FString Text)
 	const FString ID{ "NEO" };
 	
 	TodayUnixTimestamp = FDateTime::Today().ToUnixTimestamp();
-	Log = new BUFLog(ID, Text);
+	Log = new FSPLogWriter(ID, Text);
 	return true;
 }
-
 
 float UFSPLog::GetTimestamp() const
 {
@@ -45,6 +44,5 @@ bool UFSPLog::WriteMessage(const FString Text) const
 
 bool UFSPLog::IsLogOpen() const
 {
-	return Log == nullptr;
+	return Log->IsOpen();
 }
-

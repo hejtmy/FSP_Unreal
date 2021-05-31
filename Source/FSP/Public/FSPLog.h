@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "BUFLog.h"
+#include "FSPLogWriter.h"
 #include "FSPLog.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -25,12 +25,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "FSPLogging", BlueprintPure = False)
 	bool CreateFile(FString Text);
 
-	UFUNCTION(BlueprintCallable, Category = "FSPLogging", BlueprintPure = False)
+	UFUNCTION(BlueprintPure, Category = "FSPLogging")
 	bool IsLogOpen() const;
 
-
 protected:
-	BUFLog* Log;
+	FSPLogWriter* Log;
 
 private:
 	int64 TodayUnixTimestamp;
