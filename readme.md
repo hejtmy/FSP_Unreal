@@ -1,21 +1,26 @@
 # Fake scene Presenter unreal plugin
 
-## Overview
+# Overview
 
 The FSP offers gamemode (just to setup correct pawn), pawn with cinecamera and attached components (trackrider and recorder). 
 
-## Setup
-The package logging is build on top of BrainvrUnrealFramework. Need to include the plugin in the project and add "BrainvrUnrealFramework" to the FSP.build.cs file as a dependency.
+# Setup
 
-## Use
+## Scene setup
 
-The most straighforward way is to use the FSPGame mode. it uses the BP_FSPPawn as the main pawn.
+### Engine setup
+To allow object tracing and data collection, you need to add a FSPObject trace in settings. 
 
-If you desire to have the pawn tracking a specific path, use the BP_CameraTrack (see Tracks)
+### Objects
+Each object to be tracked needs to have the FSPObject component. This will allow the object to be tracked as well as be moved etc. To prevent problems with occlusion, each FPS object then needs to set its collision response to overlap FSPObject traces. This will allow tracing objects which only "peak" behind corners without necessity to setup multiple collision boxes within them. 
 
-The input is being parsed in the BP_Experiment manager
 
-### Tracks
+
+# Use
+
+The most straighforward way is to use the FSPGame mode. it uses the BP_FSPPawn as the main pawn. If you desire to have the pawn tracking a specific path, use the BP_CameraTrack (see Tracks). The input is being parsed in the BP_Experiment manager
+
+## Tracks
 
 Setup the BP_CameraTrack as you see fit
 
@@ -23,13 +28,18 @@ Add BP_FPSTrackRider and attach whatever you see fit onto it. The rider follows 
 
 The 
 
-### Recording
-REcording of positions happens in the viewport 
+## Recording
+Recording of positions happens in the viewport. The speed of the recording shouldn't make much difference, but try keeping it around 30 s. Too fast recordings can lead to skewed results. 
 - in playmode press "E" in editor or esc in build
 - press record
 - let it run
 
-Recording of video
+### Video Capture
+
+Atm recording is kinda hacky, as other solutions would require c++ classes which will come later.
+
+Simple recording can be achieved through screen recording, but that might have some issues with timing. The best and most controlled way is with hacky sequencer
+
 Option 1: use a regular screen capture
 Option 2: Use a sequencer
 - Create a sequence
@@ -37,17 +47,22 @@ Option 2: Use a sequencer
 // NOT implemented :D 
 - set the sequence to the track
 
-
-Recording of screenshots:
+### Screenshots capture:
 Option 1: Screenshots from hooks
 -  
-Option 2:
-- Screenshots from trail
-
-Atm recording is kinda hacky, as other solutions would require c++ classes which will come later.
-
-Simple recording can be achieved through screen recording, but that might have some issues with timing. The best and most controlled way is with hacky sequencer.
+Option 2: Screenshots from trail
+- in the FSP_recorder set the desired number of screenshots in the N Screenshot field
+- in playmode press "E" or esc in build
+- press record screenshots
 
 Prepare the track 
 
 Recording is done
+
+
+### Changes
+Lighting baking
+
+There is the issue of any object, which is moved int he scene, will, by necessity, affect the scene lighting. Therefore it is necessary to bake the lights before each individual run, while hiding the original objects. This can be circumvented in case you are using multiple scenes, 
+
+
