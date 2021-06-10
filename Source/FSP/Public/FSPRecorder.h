@@ -3,24 +3,58 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "GameFramework/Actor.h"
+#include "FSPPawn.h"
 #include "FSPRecorder.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FScreenshotsStateChanged);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FSP_API UFSPRecorder : public UActorComponent
+UCLASS()
+class FSP_API AFSPRecorder : public AActor
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UFSPRecorder();
+	AFSPRecorder();
+	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category="FSP")
+	void CreateScreenshots();
+
+	UFUNCTION(BlueprintCallable, Category="FSP")
+	void CreateScreenshot();
+
+	UFUNCTION(BlueprintCallable, Category="FSP")
+	void StopScreenshotting();
+
+	UPROPERTY(BlueprintAssignable, Category="FSP")
+	FScreenshotsStateChanged OnScreenshotTaken;
+
+	UPROPERTY(BlueprintAssignable, Category="FSP")
+	FScreenshotsStateChanged OnScreenshotsFinished;
+	
+	UPROPERTY(BlueprintAssignable, Category="FSP")
+	FScreenshotsStateChanged OnScreenshotsStopped;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UPROPERTY(EditAnywhere, Category = "FSP Required")
+	AFSPPawn* Pawn;
+
+	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	int nScreenshots = 30;
+
+	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	float ScreenshotDelay = 3.0f;
+	
+	bool bIsScreenshotting;
+	FTimerHandle ScreenshottingHandle;
+	float LastScreenshotTrack;
+	void CreateNextScreenshot();
+	void FinishScreenshotting();
 };
