@@ -3,6 +3,8 @@
 
 #include "FSPRecorder.h"
 
+#include "HighResScreenshot.h"
+
 // Sets default values for this component's properties
 AFSPRecorder::AFSPRecorder()
 {
@@ -78,13 +80,16 @@ void AFSPRecorder::CreateNextScreenshot()
 void AFSPRecorder::CreateScreenshot()
 {
 	// Analyze scene and record scene
-	const FString Command = "HighResShot 2";
-	GetWorld()->Exec(GetWorld(), *Command);
+	//const FString Command = "HighResShot 2";
+	//GetWorld()->Exec(GetWorld(), *Command);
+	GetHighResScreenshotConfig().SetResolution(ScreenshotWidth, ScreenshotHeight);
+	//GetHighResScreenshotConfig().FilenameOverride = FString("new filename");
+	FScreenshotRequest::RequestScreenshot(false);
 	OnScreenshotTaken.Broadcast();
 	UE_LOG(LogTemp, Display, TEXT("Screenshot taken"));
 }
 
-void AFSPRecorder::StopScreenshotting()
+void AFSPRecorder::StopScreenshotting() 
 {
 	if(!bIsScreenshotting) return;
 	bIsScreenshotting = false;

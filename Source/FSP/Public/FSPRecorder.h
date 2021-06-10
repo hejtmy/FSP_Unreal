@@ -39,6 +39,12 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="FSP")
 	FScreenshotsStateChanged OnScreenshotsStopped;
 
+	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	int32 ScreenshotWidth = 3840;
+	
+	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	int32 ScreenshotHeight = 2160;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
