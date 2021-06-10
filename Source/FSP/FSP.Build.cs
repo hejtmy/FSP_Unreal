@@ -26,6 +26,7 @@ public class FSP : ModuleRules
 			new string[]
 			{
 				"Core",
+				"CinematicCamera"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -37,7 +38,8 @@ public class FSP : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore"
+				"SlateCore",
+				"UMG"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
