@@ -14,8 +14,6 @@ To allow object tracing and data collection, you need to add a FSPObject trace i
 ### Objects
 Each object to be tracked needs to have the FSPObject component. This will allow the object to be tracked as well as be moved etc. To prevent problems with occlusion, each FPS object then needs to set its collision response to overlap FSPObject traces. This will allow tracing objects which only "peak" behind corners without necessity to setup multiple collision boxes within them. 
 
-
-
 # Use
 
 The most straighforward way is to use the FSPGame mode. it uses the BP_FSPPawn as the main pawn. If you desire to have the pawn tracking a specific path, use the BP_CameraTrack (see Tracks). The input is being parsed in the BP_Experiment manager
@@ -66,3 +64,6 @@ Lighting baking
 There is the issue of any object, which is moved int he scene, will, by necessity, affect the scene lighting. Therefore it is necessary to bake the lights before each individual run, while hiding the original objects. This can be circumvented in case you are using multiple scenes, 
 
 
+# FAQ
+Q: I created a scene, added few unreal brushes as temporary objects, added FSPObject to them, but the log does not record these objects?
+A: This has to do with Unreal brushes and how they handle collisions. See the issue [here](https://answers.unrealengine.com/questions/4917/bug-event-hit-not-called-on-brush-hits.html). The solution is to use static meshes and properly setup collisions or to add explicitely add a collider on the brush to generate hit events.
