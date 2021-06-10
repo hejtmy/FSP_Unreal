@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Components/SplineComponent.h"
 #include "GameFramework/Actor.h"
 #include "FSPTrack.generated.h"
 
@@ -20,7 +22,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	UPROPERTY(VisibleAnywhere, Category="FSP")
+	USplineComponent* Track;
 };
