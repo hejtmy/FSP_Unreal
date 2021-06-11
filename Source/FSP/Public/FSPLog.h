@@ -16,16 +16,19 @@ public:
 	UFSPLog();
 	const FString RelativePath = "recordings";
 	
-	UFUNCTION(BlueprintCallable, Category = "FSPLogging", BlueprintPure = False)
-	bool WriteLine(FString Text, bool AllowOverwrite) const;
+	UFUNCTION(BlueprintCallable, Category = "FSP Logging", BlueprintPure = False)
+	bool WriteLine(FString Text, bool AllowOverwrite = true) const;
 
-	UFUNCTION(BlueprintCallable, Category = "FSPLogging", BlueprintPure = False)
+	UFUNCTION(BlueprintCallable, Category="FSP Logging", BlueprintPure = False)
+	bool WriteArray(TArray<FString> Text, bool AllowOverwrite = true, FString Delim = ";") const;
+
+	UFUNCTION(BlueprintCallable, Category = "FSP Logging", BlueprintPure = False)
 	bool WriteMessage(FString Text) const;
 
-	UFUNCTION(BlueprintCallable, Category = "FSPLogging", BlueprintPure = False)
+	UFUNCTION(BlueprintCallable, Category = "FSP Logging", BlueprintPure = False)
 	bool CreateFile(FString Text);
 
-	UFUNCTION(BlueprintPure, Category = "FSPLogging")
+	UFUNCTION(BlueprintPure, Category = "FSP Logging")
 	bool IsLogOpen() const;
 
 protected:

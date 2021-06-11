@@ -32,6 +32,12 @@ bool UFSPLog::WriteLine(const FString Text, bool AllowOverwrite) const
 	return true;
 }
 
+bool UFSPLog::WriteArray(TArray<FString> Text, bool AllowOverwrite, FString Delim) const
+{
+	Log->WriteArray(Text, Delim);
+	return true;
+}
+
 bool UFSPLog::WriteMessage(const FString Text) const
 {
 	const FString Timestamp = FString::Printf(TEXT("%5.4f"), this->GetTimestamp());
