@@ -7,7 +7,7 @@
 #include "FSPObject.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(FSP), meta=(BlueprintSpawnableComponent) )
 class FSP_API UFSPObject : public UActorComponent
 {
 	GENERATED_BODY()
@@ -15,6 +15,9 @@ class FSP_API UFSPObject : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UFSPObject();
+
+	UPROPERTY(EditAnywhere, Category="FSP")
+	FName ObjectName;
 
 protected:
 	// Called when the game starts
