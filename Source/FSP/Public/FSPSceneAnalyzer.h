@@ -4,23 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DrawDebugHelpers.h"
 #include "FSPSceneAnalyzer.generated.h"
 
-UCLASS()
-class FSP_API AFSPSceneAnalyzer : public AActor
+UCLASS( ClassGroup=(FSP), meta=(BlueprintSpawnableComponent) )
+class FSP_API UFSPSceneAnalyzer : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AFSPSceneAnalyzer();
+	UFSPSceneAnalyzer();
 
+	UFUNCTION(BlueprintCallable, Category="FSP")
+	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false, bool DrawDebug = false) const;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, Category="FSP")
+	float ScanDistance = 1000;
 
+private:
+	void DoTraceFromScreen(float X, float Y, float Distance, bool DrawHits, bool DrawDebug, APlayerController* Player, FName& HitName) const;
 };
