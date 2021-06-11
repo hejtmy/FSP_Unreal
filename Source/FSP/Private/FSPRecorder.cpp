@@ -9,6 +9,7 @@
 AFSPRecorder::AFSPRecorder()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	SceneAnalyzer = CreateDefaultSubobject<UFSPSceneAnalyzer>(TEXT("SceneAnalyzer"));
 }
 
 
@@ -27,6 +28,10 @@ void AFSPRecorder::BeginPlay()
 void AFSPRecorder::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AFSPRecorder::StartRecording()
+{
 }
 
 void AFSPRecorder::CreateScreenshots()

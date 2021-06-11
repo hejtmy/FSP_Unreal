@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "FSPPawn.h"
+#include "FSPSceneAnalyzer.h"
 #include "FSPRecorder.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FScreenshotsStateChanged);
@@ -21,6 +22,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP")
+	UFSPSceneAnalyzer* SceneAnalyzer;
+
+	UFUNCTION(BlueprintCallable, Category="FSP")
+	void StartRecording();
+
 	UFUNCTION(BlueprintCallable, Category="FSP")
 	void CreateScreenshots();
 
@@ -33,16 +40,16 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="FSP")
 	FScreenshotsStateChanged OnScreenshotTaken;
 
-	UPROPERTY(BlueprintAssignable, Category="FSP")
+	UPROPERTY(BlueprintAssignable, Category=FSP)
 	FScreenshotsStateChanged OnScreenshotsFinished;
 	
 	UPROPERTY(BlueprintAssignable, Category="FSP")
 	FScreenshotsStateChanged OnScreenshotsStopped;
 
-	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP Screenshots")
 	int32 ScreenshotWidth = 3840;
 	
-	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP Screenshots")
 	int32 ScreenshotHeight = 2160;
 	
 protected:
@@ -57,7 +64,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
 	float ScreenshotDelay = 3.0f;
-	
+
+private:
 	bool bIsScreenshotting;
 	FTimerHandle ScreenshottingHandle;
 	float LastScreenshotTrack;
