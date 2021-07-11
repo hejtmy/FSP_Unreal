@@ -52,6 +52,7 @@ Option 2: Screenshots from trail
 - in the FSP_recorder set the desired number of screenshots in the N Screenshot field
 - in playmode press "E" or esc in build
 - press record screenshots
+- screenshots are consecutively created and logs objects position are recorded as well
 
 Prepare the track 
 
@@ -62,6 +63,11 @@ Recording is done
 Lighting baking
 
 There is the issue of any object, which is moved int he scene, will, by necessity, affect the scene lighting. Therefore it is necessary to bake the lights before each individual run, while hiding the original objects. This can be circumvented in case you are using multiple scenes, 
+
+# Developer Overview
+The game mode sets the default pawn to be FSPPawn. Pawn
+
+Track is defined by FSPTrack. 
 
 
 # FAQ
