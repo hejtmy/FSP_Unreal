@@ -12,7 +12,6 @@ AFSPRecorder::AFSPRecorder()
 	SceneAnalyzer = CreateDefaultSubobject<UFSPSceneAnalyzer>(TEXT("SceneAnalyzer"));
 }
 
-
 // Called when the game starts
 void AFSPRecorder::BeginPlay()
 {
@@ -32,6 +31,7 @@ void AFSPRecorder::Tick(float DeltaTime)
 
 void AFSPRecorder::StartRecording()
 {
+	
 }
 
 void AFSPRecorder::CreateScreenshots()
@@ -52,7 +52,7 @@ void AFSPRecorder::CreateScreenshots()
 	NextFuncDelegate.BindLambda([&](){
 		const float newTrackPosition = Pawn->TrackRider->TrackPosition + 1.0/static_cast<float>(nScreenshots);
 		UE_LOG(LogTemp, Display, TEXT("Delegate called"));
-		if(newTrackPosition>=1)
+		if(newTrackPosition > 1)
 		{
 			FinishScreenshotting();
 		}
@@ -62,7 +62,8 @@ void AFSPRecorder::CreateScreenshots()
 			CreateScreenshot();
 		}
 	});
-	//GetWorldTimerManager().SetTimer(ScreenshottingHandle, NextFuncDelegate, ScreenshotDelay, true, 0.0f);
+	//GetWorldTimerManager().SetTimer(ScreenshottingHandle, NextFuncDelegate, ScreenshotDelay,
+	//	true, 0.0f);
 	GetWorldTimerManager().SetTimer(ScreenshottingHandle, this, &AFSPRecorder::CreateNextScreenshot,
 		ScreenshotDelay, true, 0.0f);
 }
@@ -107,5 +108,3 @@ void AFSPRecorder::FinishScreenshotting()
 	GetWorldTimerManager().ClearTimer(ScreenshottingHandle);
 	Pawn->TrackRider->ShowControls(true);
 }
-
-
