@@ -14,21 +14,25 @@ class FSP_API UFSPLog : public UActorComponent
 
 public:
 	UFSPLog();
+	
 	const FString RelativePath = "recordings";
 	
-	UFUNCTION(BlueprintCallable, Category = "FSP Logging", BlueprintPure = False)
+	UFUNCTION(BlueprintCallable, Category = "FSP|Logging", BlueprintPure = False)
+	bool CreateFile(FString Text);
+	
+	UFUNCTION(BlueprintCallable, Category = "FSP|Logging", BlueprintPure = False)
 	bool WriteLine(FString Text, bool AllowOverwrite = true) const;
 
-	UFUNCTION(BlueprintCallable, Category="FSP Logging", BlueprintPure = False)
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = False)
 	bool WriteArray(TArray<FString> Text, bool AllowOverwrite = true, FString Delim = ";") const;
 
-	UFUNCTION(BlueprintCallable, Category = "FSP Logging", BlueprintPure = False)
+	UFUNCTION(BlueprintCallable, Category = "FSP|Logging", BlueprintPure = False)
 	bool WriteMessage(FString Text) const;
 
-	UFUNCTION(BlueprintCallable, Category = "FSP Logging", BlueprintPure = False)
-	bool CreateFile(FString Text);
-
-	UFUNCTION(BlueprintPure, Category = "FSP Logging")
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging")
+	void CloseFile();
+	
+	UFUNCTION(BlueprintPure, Category = "FSP|Logging")
 	bool IsLogOpen() const;
 
 protected:
@@ -37,4 +41,5 @@ protected:
 private:
 	int64 TodayUnixTimestamp;
 	float GetTimestamp() const;
+	FString CreateTimestamp() const;
 };

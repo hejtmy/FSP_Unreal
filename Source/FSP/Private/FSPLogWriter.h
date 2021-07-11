@@ -18,8 +18,8 @@ public:
 	FString FilePath;
 	FString FileDirectory;
 	
-	bool Open() const;
-	void Close() const;
+	bool Open();
+	void Close();
 	bool IsOpen() const;
 
 	void WriteLine(FString line) const;

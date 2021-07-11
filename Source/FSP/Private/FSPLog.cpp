@@ -21,9 +21,13 @@ float UFSPLog::GetTimestamp() const
 	const FDateTime Now{ FDateTime::Now() };
 	float TimestampNow = static_cast<float>(Now.ToUnixTimestamp() - TodayUnixTimestamp);
 	const FString ms = FString::FromInt(Now.GetMillisecond());
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *ms);
 	TimestampNow += Now.GetMillisecond() / 1000.0f;
 	return TimestampNow;
+}
+
+FString UFSPLog::CreateTimestamp() const
+{
+	return FString::Printf(TEXT("%5.4f"), this->GetTimestamp());
 }
 
 bool UFSPLog::WriteLine(const FString Text, bool AllowOverwrite) const
@@ -34,18 +38,27 @@ bool UFSPLog::WriteLine(const FString Text, bool AllowOverwrite) const
 
 bool UFSPLog::WriteArray(TArray<FString> Text, bool AllowOverwrite, FString Delim) const
 {
-	Log->WriteArray(Text, Delim);
+	TArray<FString> Arr;
+	Arr.Add(CreateTimestamp());
+	Arr.Append(Text);
+	Log->WriteArray(Arr, Delim);
 	return true;
 }
 
+/**
+ * Writes given line after appending timestamp
+ *
+ *@param Text text to be written into given file
+ */
 bool UFSPLog::WriteMessage(const FString Text) const
 {
-	const FString Timestamp = FString::Printf(TEXT("%5.4f"), this->GetTimestamp());
-	TArray<FString> Arr;
-	Arr.Add(Timestamp);
-	Arr.Add(Text);
-	Log->WriteArray(Arr);
-	return true;
+	return WriteArray(TArray<FString>{Text});
+}
+
+void UFSPLog::CloseFile()
+{
+	Log->Close();
+	delete Log;
 }
 
 bool UFSPLog::IsLogOpen() const

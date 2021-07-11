@@ -14,7 +14,7 @@ FSPLogWriter::FSPLogWriter(FString Prefix, FString LogName, FString Timestamp)
 		LogTimestamp = Timestamp;
 	}
 	FilePath = CreateFilepath(&Prefix, &LogName, &LogTimestamp);
-	Open();
+	this->Open();
 }
 
 FSPLogWriter::~FSPLogWriter()
@@ -22,7 +22,7 @@ FSPLogWriter::~FSPLogWriter()
 	
 }
 
-bool FSPLogWriter::Open() const
+bool FSPLogWriter::Open()
 {
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	const FString Directory = FPaths::GetPath(FilePath);
@@ -35,9 +35,10 @@ bool FSPLogWriter::Open() const
 	return false;
 }
 
-void FSPLogWriter::Close() const
+void FSPLogWriter::Close()
 {
 	delete File;
+	FilePath.Reset();
 }
 
 FString FSPLogWriter::CreateFilepath(FString* Prefix, FString* LogName, FString* Timestamp) const
@@ -50,7 +51,7 @@ FString FSPLogWriter::CreateFilepath(FString* Prefix, FString* LogName, FString*
 
 bool FSPLogWriter::IsOpen() const
 {
-	return &FilePath != nullptr;
+	return !FilePath.IsEmpty();
 }
 
 void FSPLogWriter::WriteLine(FString Line) const

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "FSPLog.h"
+#include "FSPObject.h"
+
 #include "FSPLogger.generated.h"
 
 UCLASS()
@@ -20,14 +22,44 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-    UPROPERTY(VisibleAnywhere)
-    UFSPLog* Log;
-    
+	UPROPERTY(EditAnywhere, Category="FSP", meta=(ClampMin="20"))
+	int32 LoggingFrequency = 50;
+	
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UFSPLog* SceneAnalysisLog;
+	
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UFSPLog* PositionLog;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool IsLoggingPosition;
+
     UPROPERTY(VisibleAnywhere)
     USceneComponent* RootSceneComponent;
+	
+private:
+	UPROPERTY()
+	AActor* ObjectBeingTracked;
 
+	FTimerHandle PositionLoggingHandle;
+
+	float LastPositionLoggedTime;
+
+	FString LocationToString(FVector Location) const;
+	
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging")
+	bool StartLoggingPosition(AActor* Object);
 
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging")
+	void StopLoggingPosition();
+
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
+	void LogPosition(AActor* Object) const;
+	
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
+	bool LogSceneAnalysis(TMap<FName, int32> Results) const;
+
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
+	void LogItemsPositions(TArray<UFSPObject*> Objects) const;
 };
