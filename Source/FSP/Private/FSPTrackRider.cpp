@@ -10,7 +10,6 @@ UFSPTrackRider::UFSPTrackRider()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 // Called when the game starts
 void UFSPTrackRider::BeginPlay()
 {
@@ -37,9 +36,8 @@ void UFSPTrackRider::BeginPlay()
 void UFSPTrackRider::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(!bIsMoving) return;
-	SetTrackPosition(TrackPosition);
 	if(!bMoveAutomatically) return;
+	SetTrackPosition(TrackPosition);
 	UpdateTrackPosition(DeltaTime);
 }
 
