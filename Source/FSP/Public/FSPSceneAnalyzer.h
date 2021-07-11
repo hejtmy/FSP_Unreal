@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "DrawDebugHelpers.h"
+#include "FSPObject.h"
+
 #include "FSPSceneAnalyzer.generated.h"
 
 UCLASS( ClassGroup=(FSP), meta=(BlueprintSpawnableComponent) )
@@ -18,6 +20,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="FSP")
 	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false, bool DrawDebug = false) const;
+
+	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis")
+	void GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const;
 	
 protected:
 	// Called when the game starts or when spawned

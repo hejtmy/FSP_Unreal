@@ -11,6 +11,12 @@ UFSPSceneAnalyzer::UFSPSceneAnalyzer()
 	
 }
 
+// Called when the game starts or when spawned
+void UFSPSceneAnalyzer::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, int32 Precision,
 	bool DrawHits, bool DrawDebug) const
 {
@@ -58,8 +64,22 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 	return Out;
 }
 
+void UFSPSceneAnalyzer::GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const
+{
+	const FVector Position = Object->GetOwner()->GetActorLocation();
+	FVector2D ViewportSize;
+	GEngine->GameViewport->GetViewportSize(ViewportSize);
+	if(Player->ProjectWorldLocationToScreen(Position, Out))
+	{
+		Out = Out/ViewportSize;
+	} else
+	{
+		Out = FVector2D(-9999,-9999);
+	}
+}
+
 void UFSPSceneAnalyzer::DoTraceFromScreen(float X, float Y, float Distance, bool DrawHits, bool DrawDebug,
-	APlayerController* Player, FName& HitName) const
+                                          APlayerController* Player, FName& HitName) const
 {
 	FVector WorldLocation;
 	FVector WorldRotation;
@@ -89,10 +109,4 @@ void UFSPSceneAnalyzer::DoTraceFromScreen(float X, float Y, float Distance, bool
 		DrawDebugLine(GetWorld(), WorldLocation, TraceEnd, FColor::Green,
 		false, 1, 0, 1);
 	}
-}
-
-// Called when the game starts or when spawned
-void UFSPSceneAnalyzer::BeginPlay()
-{
-	Super::BeginPlay();
 }
