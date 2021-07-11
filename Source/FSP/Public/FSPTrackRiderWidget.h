@@ -33,7 +33,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ButtonGo;
 
-
 private:
 	UFUNCTION()
 	void MoveOnTrack(float TrackPosition);

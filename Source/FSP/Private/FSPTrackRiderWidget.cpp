@@ -6,9 +6,9 @@
 void UFSPTrackRiderWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	ButtonGo->OnClicked.AddDynamic(this, &UFSPTrackRiderWidget::SwitchGo);
-	SliderDuration->OnValueChanged.AddDynamic(this, &UFSPTrackRiderWidget::SetDuration);
-	SliderTrackPosition->OnValueChanged.AddDynamic(this, &UFSPTrackRiderWidget::MoveOnTrack);
+	ButtonGo->OnClicked.AddUniqueDynamic(this, &UFSPTrackRiderWidget::SwitchGo);
+	SliderDuration->OnValueChanged.AddUniqueDynamic(this, &UFSPTrackRiderWidget::SetDuration);
+	SliderTrackPosition->OnValueChanged.AddUniqueDynamic(this, &UFSPTrackRiderWidget::MoveOnTrack);
 }
 
 void UFSPTrackRiderWidget::MoveOnTrack(float TrackPosition)
