@@ -8,8 +8,12 @@ AFSPTrack::AFSPTrack()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	Track = CreateDefaultSubobject<USplineComponent>("Track");
-	RootComponent = Track;
+    SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRoot"));
+	RootComponent = SceneRoot;
+	
+	Track = CreateDefaultSubobject<USplineComponent>(TEXT("Track"));
+
+    Track->SetupAttachment(SceneRoot);
 }
 
 // Called when the game starts or when spawned

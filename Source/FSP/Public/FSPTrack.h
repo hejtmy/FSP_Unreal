@@ -22,6 +22,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UPROPERTY(VisibleAnywhere, Category="FSP")
+	UPROPERTY(EditAnywhere, Category="FSP")
 	USplineComponent* Track;
+	
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    USceneComponent* SceneRoot;
 };
