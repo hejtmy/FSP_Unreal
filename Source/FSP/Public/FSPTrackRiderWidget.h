@@ -21,19 +21,19 @@ class FSP_API UFSPTrackRiderWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="FSP Values")
 	UFSPTrackRider* TrackRider;
 	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite,meta = (BindWidget))
 	USlider* SliderTrackPosition;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	USlider* SliderDuration;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* ButtonGo;
 
-private:
+public:
 	UFUNCTION()
 	void MoveOnTrack(float TrackPosition);
 
@@ -42,4 +42,8 @@ private:
 
 	UFUNCTION()
 	void SwitchGo();
+
+	UFUNCTION(BlueprintGetter)
+	float CurrentSpeed() const;
+	
 };

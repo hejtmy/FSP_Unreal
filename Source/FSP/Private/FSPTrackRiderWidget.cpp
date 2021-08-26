@@ -27,3 +27,8 @@ void UFSPTrackRiderWidget::SwitchGo()
 {
 	TrackRider->SwitchMoving();
 }
+
+float UFSPTrackRiderWidget::CurrentSpeed() const
+{
+	return TrackRider->Duration;
+}
