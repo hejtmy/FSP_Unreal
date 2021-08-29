@@ -72,7 +72,8 @@ void UFSPSceneAnalyzer::GetScreenPosition(APlayerController* Player, UFSPObject*
 	if(Player->ProjectWorldLocationToScreen(Position, Out))
 	{
 		Out = Out/ViewportSize;
-	} else
+	}
+	else
 	{
 		Out = FVector2D(-9999,-9999);
 	}

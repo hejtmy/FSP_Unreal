@@ -18,8 +18,16 @@ public:
 	// Sets default values for this actor's properties
 	UFSPSceneAnalyzer();
 
+	/**Analyses scene and counts hwat portion of a screen each FSP object takes with given precision.
+      * @param Player pointer to a player object from which the raytracing originates. The player needs to have a valid camera
+      * @param Precision how many rays to shoot (
+      * @param DrawHits debug purpose, set true to visualise hits of UFSPObjects
+      * @param DrawDebug draws the raycasted rays
+      * @return TMap with an object and int32 describing how many rays have struck the object
+    **/
 	UFUNCTION(BlueprintCallable, Category="FSP")
-	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false, bool DrawDebug = false) const;
+	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false,
+		bool DrawDebug = false) const;
 
 	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis")
 	void GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const;
@@ -32,5 +40,6 @@ protected:
 	float ScanDistance = 1000;
 
 private:
-	void DoTraceFromScreen(float X, float Y, float Distance, bool DrawHits, bool DrawDebug, APlayerController* Player, FName& HitName) const;
+	void DoTraceFromScreen(float X, float Y, float Distance, bool DrawHits, bool DrawDebug,
+		APlayerController* Player, FName& HitName) const;
 };
