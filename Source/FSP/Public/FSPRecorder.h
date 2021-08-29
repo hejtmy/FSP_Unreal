@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "FSPLogger.h"
 #include "GameFramework/Actor.h"
 #include "FSPPawn.h"
 #include "FSPSceneAnalyzer.h"
@@ -22,11 +24,28 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Analysis")
 	UFSPSceneAnalyzer* SceneAnalyzer;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Analysis")
+	int32 Precision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Recording")
+	int32 LoggingFrequency = 50;
+
+	/** Starts recording and logging positional and scene information with passed logger **/
+	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
+	void StartRecording(AFSPLogger* Logging);
+
+	/** Starts recording without any logging**/
+	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
+	void StartRecordingWithoutLogging();
+	
+	UFUNCTION()
+	void LogData();
 
 	UFUNCTION(BlueprintCallable, Category="FSP")
-	void StartRecording();
+	void StopRecording();
 
 	UFUNCTION(BlueprintCallable, Category="FSP")
 	void CreateScreenshots();
@@ -46,28 +65,35 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="FSP")
 	FScreenshotsStateChanged OnScreenshotsStopped;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP Screenshots")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Screenshots")
 	int32 ScreenshotWidth = 3840;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP Screenshots")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Screenshots")
 	int32 ScreenshotHeight = 2160;
 	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "FSP Required")
+	UPROPERTY(EditAnywhere, Category = "FSP|Required")
 	AFSPPawn* Pawn;
 
-	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	UPROPERTY(EditAnywhere, Category="FSP|Screenshots")
 	int nScreenshots = 30;
 
-	UPROPERTY(EditAnywhere, Category="FSP Screenshots")
+	UPROPERTY(EditAnywhere, Category="FSP|Screenshots")
 	float ScreenshotDelay = 3.0f;
 
+	bool isRecording = false;
+
+	void FinishRecording();
+	
 private:
+	UPROPERTY()
+	AFSPLogger* Logger;
 	bool bIsScreenshotting;
 	FTimerHandle ScreenshottingHandle;
+	FTimerHandle LoggingHandle;
 	float LastScreenshotTrack;
 	void CreateNextScreenshot();
 	void FinishScreenshotting();

@@ -16,11 +16,6 @@ AFSPRecorder::AFSPRecorder()
 void AFSPRecorder::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if(bIsScreenshotting)
-	{
-		
-	}
 }
 
 // Called every frame
@@ -29,9 +24,53 @@ void AFSPRecorder::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AFSPRecorder::StartRecording()
+void AFSPRecorder::StartRecording(AFSPLogger* Logging)
 {
+	UFSPTrackRider* Rider = Pawn->TrackRider;
+    Rider->SetTrackPosition(0);
+    Rider->ShowControls(false);
+    Rider->OnTrackFinished.AddUniqueDynamic(this, &AFSPRecorder::FinishRecording);
+	this->Logger = Logging;
+	Logger->StartLoggingPosition(Pawn);
 	
+	FTimerDelegate LoggingDelegate;
+
+	LoggingDelegate.BindUFunction(this, FName("LogData"));
+	GetWorldTimerManager().SetTimer(LoggingHandle, LoggingDelegate,
+		static_cast<float>(1/LoggingFrequency), true);
+    Rider->StartMoving();
+}
+
+void AFSPRecorder::StartRecordingWithoutLogging()
+{
+	UFSPTrackRider* Rider = Pawn->TrackRider;
+    Rider->SetTrackPosition(0);
+    Rider->ShowControls(false);
+    Rider->OnTrackFinished.AddUniqueDynamic(this, &AFSPRecorder::FinishRecording);
+    Rider->StartMoving();
+}
+
+void AFSPRecorder::LogData()
+{
+	UE_LOG(LogTemp, Display, TEXT("Data have been logged"));
+	Logger->LogPosition(Pawn);
+	TMap<FName, int32> results = SceneAnalyzer->AnalyzeScene(Cast<APlayerController>(Pawn->Controller), Precision);
+	Logger->LogSceneAnalysis(results);
+}
+
+void AFSPRecorder::StopRecording()
+{
+	FinishRecording();
+}
+
+void AFSPRecorder::FinishRecording()
+{
+	UFSPTrackRider* Rider = Pawn->TrackRider;
+	Rider->StopMoving();
+	Rider->ShowControls(true);
+	Rider->OnTrackFinished.RemoveDynamic(this, &AFSPRecorder::FinishRecording);
+	GetWorldTimerManager().ClearTimer(LoggingHandle);
+	Logger = nullptr;
 }
 
 void AFSPRecorder::CreateScreenshots()
@@ -93,6 +132,9 @@ void AFSPRecorder::CreateScreenshot()
 	FScreenshotRequest::RequestScreenshot(false);
 	OnScreenshotTaken.Broadcast();
 	UE_LOG(LogTemp, Display, TEXT("Screenshot taken"));
+
+	// TODO - Add scene analysis
+	//SceneAnalyzer->AnalyzeScene();
 }
 
 void AFSPRecorder::StopScreenshotting() 
