@@ -46,6 +46,9 @@ private:
 	float LastPositionLoggedTime;
 
 	FString LocationToString(FVector Location) const;
+
+	void CreatePositionLog() const;
+	void CreateSceneAnalysisLog() const;
 	
 public:	
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging")
@@ -58,7 +61,7 @@ public:
 	void LogPosition(AActor* Object) const;
 	
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
-	bool LogSceneAnalysis(TMap<FName, int32> Results) const;
+	bool LogSceneAnalysis(TMap<FName, int32> Results);
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
 	void LogItemsPositions(TArray<UFSPObject*> Objects) const;

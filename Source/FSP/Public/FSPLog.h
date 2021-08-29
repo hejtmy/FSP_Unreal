@@ -32,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging")
 	void CloseFile();
 	
-	UFUNCTION(BlueprintPure, Category = "FSP|Logging")
+	UFUNCTION(BlueprintGetter, Category = "FSP|Logging")
 	bool IsLogOpen() const;
 
 protected:
