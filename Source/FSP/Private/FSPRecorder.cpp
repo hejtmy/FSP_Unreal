@@ -32,13 +32,11 @@ void AFSPRecorder::StartRecording(AFSPLogger* Logging)
     Rider->OnTrackFinished.AddUniqueDynamic(this, &AFSPRecorder::FinishRecording);
 	this->Logger = Logging;
 	Logger->StartLoggingPosition(Pawn);
-	
-	FTimerDelegate LoggingDelegate;
 
-	LoggingDelegate.BindUFunction(this, FName("LogData"));
-	GetWorldTimerManager().SetTimer(LoggingHandle, LoggingDelegate,
-		static_cast<float>(1/LoggingFrequency), true);
+	GetWorldTimerManager().SetTimer(LoggingHandle, this, &AFSPRecorder::LogData,
+		1/static_cast<float>(LoggingFrequency), true);
     Rider->StartMoving();
+	UE_LOG(LogTemp, Display, TEXT("Recording started"));
 }
 
 void AFSPRecorder::StartRecordingWithoutLogging()
@@ -54,18 +52,20 @@ void AFSPRecorder::LogData()
 {
 	UE_LOG(LogTemp, Display, TEXT("Data have been logged"));
 	Logger->LogPosition(Pawn);
-	TMap<FName, int32> results = SceneAnalyzer->AnalyzeScene(Cast<APlayerController>(Pawn->Controller), Precision);
-	Logger->LogSceneAnalysis(results);
+	const TMap<FName, int32> Results = SceneAnalyzer->AnalyzeScene(Cast<APlayerController>(Pawn->Controller), Precision);
+	Logger->LogSceneAnalysis(Results);
 }
 
 void AFSPRecorder::StopRecording()
 {
+	UE_LOG(LogTemp, Display, TEXT("Recording Stopped"));
 	FinishRecording();
 }
 
 void AFSPRecorder::FinishRecording()
 {
 	UFSPTrackRider* Rider = Pawn->TrackRider;
+	UE_LOG(LogTemp, Display, TEXT("Recording finished"));
 	Rider->StopMoving();
 	Rider->ShowControls(true);
 	Rider->OnTrackFinished.RemoveDynamic(this, &AFSPRecorder::FinishRecording);

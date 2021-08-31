@@ -86,6 +86,7 @@ protected:
 
 	bool isRecording = false;
 
+	UFUNCTION()
 	void FinishRecording();
 	
 private:

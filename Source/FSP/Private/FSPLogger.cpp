@@ -34,7 +34,7 @@ bool AFSPLogger::StartLoggingPosition(AActor* Object)
 
 	PositionLoggingDelegate.BindUFunction(this, FName("LogPosition"), ObjectBeingTracked);
 	GetWorldTimerManager().SetTimer(PositionLoggingHandle, PositionLoggingDelegate,
-		static_cast<float>(LoggingFrequency/1000), true);
+		1/static_cast<float>(LoggingFrequency), true);
 	return true;
 }
 
