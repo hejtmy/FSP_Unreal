@@ -24,8 +24,6 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 
 	Out.Add(TEXT("nothing"), 1);
 	Precision = FMath::Clamp<int32>(Precision, 1, 100);
-	float CurrentScanX = 0;
-	float CurrentScanY = 0;
 	FVector2D ViewportSize;
 
 	if(GEngine && GEngine->GameViewport)
@@ -39,10 +37,12 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 
 	UE_LOG(LogTemp,	Display, TEXT("%s"), *ViewportSize.ToString());
 	
+	float CurrentScanX = 0;
+	float CurrentScanY = 0;
 	//while(CurrentScanX < ViewportSize.X)
-	for(int32 i = 0; i < 10; i++)
+	for(int32 i = 0; i <= Precision; i++)
 	{
-		for(int32 j = 0; j < 10; j++)
+		for(int32 j = 0; j <= Precision; j++)
 		//while(CurrentScanY < ViewportSize.Y)
 		{
 			FName HitName;
@@ -57,9 +57,11 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 				Out.Add(HitName, Value);
 			}
 			CurrentScanY += ViewportSize.Y/static_cast<float>(Precision);
+			CurrentScanY = FMath::Clamp<float>(CurrentScanY, 0, ViewportSize.Y);
 		}
 		CurrentScanY = 0;
 		CurrentScanX += ViewportSize.X/static_cast<float>(Precision);
+		CurrentScanX = FMath::Clamp<float>(CurrentScanX, 0, ViewportSize.X);
 	}
 	return Out;
 }
