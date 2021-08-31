@@ -25,7 +25,7 @@ public:
       * @param DrawDebug draws the raycasted rays
       * @return TMap with an object and int32 describing how many rays have struck the object
     **/
-	UFUNCTION(BlueprintCallable, Category="FSP")
+	UFUNCTION(BlueprintCallable, Category="FSP", BlueprintPure=false)
 	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false,
 		bool DrawDebug = false) const;
 
