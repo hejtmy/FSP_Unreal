@@ -63,5 +63,6 @@ void UFSPLog::CloseFile()
 
 bool UFSPLog::IsLogOpen() const
 {
+	if(Log == nullptr) return false;
 	return Log->IsOpen();
 }
