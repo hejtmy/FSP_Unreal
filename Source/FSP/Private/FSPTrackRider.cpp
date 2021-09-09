@@ -80,7 +80,7 @@ void UFSPTrackRider::SetTrackPosition(float TrackRatio)
 void UFSPTrackRider::UpdateTrackPosition(const float DeltaTime)
 {
 	TrackPosition += DeltaTime/Duration;
-	if(TrackPosition > 1)
+	if(TrackPosition >= 1)
 	{
 		OnTrackFinished.Broadcast();
 		TrackPosition = 0;
