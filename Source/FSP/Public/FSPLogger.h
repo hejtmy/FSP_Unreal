@@ -18,12 +18,19 @@ public:
 	// Sets default values for this actor's properties
 	AFSPLogger();
 
+	UFUNCTION(BlueprintCallable)
+	void WriteToPositionLog(TArray<FString> Messages) const;
+
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging|Helpers")
+	static FString LocationToString(FVector Location);
+	static FString ScreenPositionToString(FVector2D& Position);
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category="FSP", meta=(ClampMin="20"))
-	int32 LoggingFrequency = 50;
+	UPROPERTY(EditAnywhere, Category="FSP", meta=(ClampMin="1", ClampMax="100"))
+	int32 LoggingFrequency = 20;
 	
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UFSPLog* SceneAnalysisLog;
@@ -31,24 +38,14 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UFSPLog* PositionLog;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UFSPLog* ScreenPositionLog;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool IsLoggingPosition;
 
     UPROPERTY(VisibleAnywhere)
     USceneComponent* RootSceneComponent;
-	
-private:
-	UPROPERTY()
-	AActor* ObjectBeingTracked;
-
-	FTimerHandle PositionLoggingHandle;
-
-	float LastPositionLoggedTime;
-
-	FString LocationToString(FVector Location) const;
-
-	void CreatePositionLog() const;
-	void CreateSceneAnalysisLog() const;
 	
 public:	
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging")
@@ -58,11 +55,27 @@ public:
 	void StopLoggingPosition();
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
-	void LogPosition(AActor* Object) const;
-	
-	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
-	bool LogSceneAnalysis(TMap<FName, int32> Results);
+	void LogPosition(AActor* Object, int32 iAnalysis = -1) const;
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
-	void LogItemsPositions(TArray<UFSPObject*> Objects) const;
+	bool LogSceneAnalysis(TMap<FName, int32> Results, int32 iAnalysis = -1);
+
+	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = false)
+	void LogObjectsPositions(TArray<UFSPObject*> Objects) const;
+
+	UFUNCTION(BlueprintCallable)
+	void LogObjectScreenPosition(FVector2D& Position, FString& Name, int32 iAnalysis = -1);
+
+private:
+	UPROPERTY()
+	AActor* ObjectBeingTracked;
+
+	FTimerHandle PositionLoggingHandle;
+
+	float LastPositionLoggedTime;
+
+	void CreatePositionLog() const;
+	void CreateSceneAnalysisLog() const;
+	void CreateScreenPositionLog() const;
+
 };

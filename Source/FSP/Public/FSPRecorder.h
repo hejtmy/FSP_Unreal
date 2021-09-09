@@ -26,43 +26,55 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Analysis")
 	UFSPSceneAnalyzer* SceneAnalyzer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP|Analysis")
+	AFSPObjectManager* ObjectManager;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Analysis")
 	int32 Precision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Recording")
-	int32 LoggingFrequency = 50;
+	int32 SceneAnalysisLoggingFrequency = 50;
 
-	/** Starts recording and logging positional and scene information with passed logger **/
+	/**
+	 *@brief Starts recording and logging positional and scene information with passed logger
+	 **/
 	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
 	void StartRecording(AFSPLogger* Logging);
 
-	/** Starts recording without any logging**/
+	/** Starts recording without any logging **/
 	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
 	void StartRecordingWithoutLogging();
 	
 	UFUNCTION()
-	void LogData();
+	void LogSceneAnalysis();
+
 
 	UFUNCTION(BlueprintCallable, Category="FSP")
 	void StopRecording();
 
+	/**
+	 * @brief Creates given number of screenshots and logs the scene and position information
+	 */
 	UFUNCTION(BlueprintCallable, Category="FSP")
-	void CreateScreenshots();
+	void CreateScreenshots(AFSPLogger* Logging);
 
-	UFUNCTION(BlueprintCallable, Category="FSP")
+	/**
+	 * @brief Creates a single screenshot from the position in which player is standing. No information is logged
+	 */
+	UFUNCTION(BlueprintCallable, Category="FSP|Screenshots")
 	void CreateScreenshot();
 
-	UFUNCTION(BlueprintCallable, Category="FSP")
+	UFUNCTION(BlueprintCallable, Category="FSP|Screenshots")
 	void StopScreenshotting();
 
-	UPROPERTY(BlueprintAssignable, Category="FSP")
+	UPROPERTY(BlueprintAssignable, Category="FSP|Screenshots")
 	FScreenshotsStateChanged OnScreenshotTaken;
 
-	UPROPERTY(BlueprintAssignable, Category=FSP)
+	UPROPERTY(BlueprintAssignable, Category="FSP|Screenshots")
 	FScreenshotsStateChanged OnScreenshotsFinished;
 	
-	UPROPERTY(BlueprintAssignable, Category="FSP")
+	UPROPERTY(BlueprintAssignable, Category="FSP|Screenshots")
 	FScreenshotsStateChanged OnScreenshotsStopped;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Screenshots")
@@ -88,14 +100,21 @@ protected:
 
 	UFUNCTION()
 	void FinishRecording();
+
+	void ResetSceneRecordingIndex();
 	
 private:
 	UPROPERTY()
 	AFSPLogger* Logger;
+	// Screenshotting
 	bool bIsScreenshotting;
 	FTimerHandle ScreenshottingHandle;
-	FTimerHandle LoggingHandle;
 	float LastScreenshotTrack;
 	void CreateNextScreenshot();
 	void FinishScreenshotting();
+	void LogScreenshotPlayerPosition();
+
+	// Logging
+	FTimerHandle SceneAnalysisLoggingHandle;
+	int32 iSceneRecording; //index of individual scene logs
 };
