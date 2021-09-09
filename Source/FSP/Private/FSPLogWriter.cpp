@@ -37,7 +37,8 @@ bool FSPLogWriter::Open()
 
 void FSPLogWriter::Close()
 {
-	delete File;
+	// filehandle is never created
+	//delete File;
 	FilePath.Reset();
 }
 
@@ -71,11 +72,7 @@ void FSPLogWriter::WriteLine(FString Line) const
 void FSPLogWriter::WriteArray(TArray<FString> Arr, FString Delim) const
 {
 	if (!IsOpen()) return;
-	FString Out = TEXT("");
-	for(FString& Str : Arr)
-	{
-		Out += Str;
-		Out += Delim;
-	}
+	const TCHAR* Delimiter = *Delim;
+	const FString Out = FString::Join(Arr, Delimiter);
 	WriteLine(Out);
 }
