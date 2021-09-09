@@ -36,17 +36,17 @@ bool UFSPLog::WriteLine(const FString Text, bool AllowOverwrite) const
 	return true;
 }
 
-bool UFSPLog::WriteArray(TArray<FString> Text, bool AllowOverwrite, FString Delim) const
+bool UFSPLog::WriteArray(TArray<FString> Text, bool AllowOverwrite, FString Delim, bool AddTimestamp) const
 {
 	TArray<FString> Arr;
-	Arr.Add(CreateTimestamp());
+	if(AddTimestamp) Arr.Add(CreateTimestamp());
 	Arr.Append(Text);
 	Log->WriteArray(Arr, Delim);
 	return true;
 }
 
 /**
- * Writes given line after appending timestamp
+ * Writes given line and prepends timestamp
  *
  *@param Text text to be written into given file
  */

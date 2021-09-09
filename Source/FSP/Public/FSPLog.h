@@ -24,7 +24,7 @@ public:
 	bool WriteLine(FString Text, bool AllowOverwrite = true) const;
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Logging", BlueprintPure = False)
-	bool WriteArray(TArray<FString> Text, bool AllowOverwrite = true, FString Delim = ";") const;
+	bool WriteArray(TArray<FString> Text, bool AllowOverwrite = true, FString Delim = ";", bool AddTimestamp = true) const;
 
 	UFUNCTION(BlueprintCallable, Category = "FSP|Logging", BlueprintPure = False)
 	bool WriteMessage(FString Text) const;
