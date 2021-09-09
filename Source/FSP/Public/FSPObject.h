@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPObjectManager.h"
 #include "Components/ActorComponent.h"
 #include "FSPObject.generated.h"
 
+//Forward declaration
 
 UCLASS( ClassGroup=(FSP), meta=(BlueprintSpawnableComponent) )
 class FSP_API UFSPObject : public UActorComponent
@@ -26,5 +28,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-		
+
+private:
+	UPROPERTY();
+	AFSPObjectManager* ObjectManger;
+
+	AFSPObjectManager* GetObjectManger();
 };

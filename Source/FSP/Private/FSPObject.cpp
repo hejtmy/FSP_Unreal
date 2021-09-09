@@ -3,12 +3,14 @@
 
 #include "FSPObject.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values for this component's properties
 UFSPObject::UFSPObject()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -18,6 +20,9 @@ UFSPObject::UFSPObject()
 void UFSPObject::BeginPlay()
 {
 	Super::BeginPlay();
+	ObjectManger = GetObjectManger();
+	if(ObjectManger == nullptr) return;
+	ObjectManger->AddObject(this);
 }
 
 // Called every frame
@@ -25,3 +30,22 @@ void UFSPObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
+
+AFSPObjectManager* UFSPObject::GetObjectManger()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFSPObjectManager::StaticClass(), FoundActors);
+	if(FoundActors.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("There are no object manager actors in the scene. PLease add one"))
+		return nullptr;
+	}
+
+	if(FoundActors.Num() > 1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("There are more than one object manager actors in the scene. Please add JUST one"))
+		return nullptr;
+	}
+	return Cast<AFSPObjectManager>(FoundActors[0]);
+}
+
