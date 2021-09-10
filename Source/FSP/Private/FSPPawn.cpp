@@ -14,6 +14,8 @@ AFSPPawn::AFSPPawn()
     TrackRider = CreateDefaultSubobject<UFSPTrackRider>("TrackRider");
     Camera = CreateDefaultSubobject<UCineCameraComponent>("Camera");
     Camera->SetupAttachment(SceneRoot);
+
+    AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 // Called when the game starts or when spawned
