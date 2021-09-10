@@ -113,7 +113,6 @@ private:
 	float LastScreenshotTrack;
 	void CreateNextScreenshot();
 	void FinishScreenshotting();
-	void LogScreenshotPlayerPosition();
 	void LogSceneAnalysis();
 	void LogObjectPositions();
 	

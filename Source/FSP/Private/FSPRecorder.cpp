@@ -59,6 +59,7 @@ void AFSPRecorder::StartRecordingWithoutLogging()
 
 void AFSPRecorder::LogSceneData()
 {
+	Logger->LogPosition(Pawn, iSceneRecording);
 	LogSceneAnalysis();
 	LogObjectPositions();
 	
@@ -68,7 +69,6 @@ void AFSPRecorder::LogSceneData()
 
 void AFSPRecorder::LogSceneAnalysis()
 {
-	Logger->LogPosition(Pawn, iSceneRecording);
 	const TMap<FName, int32> Results = SceneAnalyzer->AnalyzeScene(Cast<APlayerController>(Pawn->Controller), Precision);
 	Logger->LogSceneAnalysis(Results, iSceneRecording);
 }
@@ -94,14 +94,6 @@ void AFSPRecorder::LogObjectPositions()
 		FString Name = Obj->ObjectName.ToString();
 		Logger->LogObjectScreenPosition(Out, Name, iSceneRecording);
 	}
-}
-
-void AFSPRecorder::LogScreenshotPlayerPosition()
-{
-	TArray<FString> Messages;
-	Messages.Add(FString::FromInt(iSceneRecording));
-	Messages.Add(Logger->LocationToString(Pawn->GetActorLocation()));
-	Logger->WriteToPositionLog(Messages);
 }
 
 void AFSPRecorder::StopRecording()
@@ -139,6 +131,16 @@ void AFSPRecorder::CreateScreenshots(AFSPLogger* Logging)
 	Pawn->TrackRider->ShowControls(false);
 	
 	LastScreenshotTrack = 0.0;
+
+	
+	if(ObjectManager != nullptr)
+	{
+		Logger->LogObjectsPositions(ObjectManager->GetObjects());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Object manager is not assigned to the Recorder. Cannot log object positions."));
+	}
 	
 	ResetSceneRecordingIndex();
 	this->Logger = Logging;
@@ -146,7 +148,6 @@ void AFSPRecorder::CreateScreenshots(AFSPLogger* Logging)
 	FTimerDelegate NextFuncDelegate;
 	NextFuncDelegate.BindLambda([&](){
 		const float newTrackPosition = Pawn->TrackRider->TrackPosition + 1.0/static_cast<float>(nScreenshots);
-		UE_LOG(LogTemp, Display, TEXT("Delegate called"));
 		if(newTrackPosition > 1)
 		{
 			FinishScreenshotting();
@@ -158,8 +159,7 @@ void AFSPRecorder::CreateScreenshots(AFSPLogger* Logging)
 		}
 	});
 
-	OnScreenshotTaken.AddDynamic(this, &AFSPRecorder::LogSceneAnalysis);
-	OnScreenshotTaken.AddDynamic(this, &AFSPRecorder::LogScreenshotPlayerPosition);
+	OnScreenshotTaken.AddDynamic(this, &AFSPRecorder::LogSceneData);
 	GetWorldTimerManager().SetTimer(ScreenshottingHandle, this, &AFSPRecorder::CreateNextScreenshot,
 		ScreenshotDelay, true, 0.0f);
 }
@@ -203,8 +203,7 @@ void AFSPRecorder::FinishScreenshotting()
 	bIsScreenshotting = false;
 	UE_LOG(LogTemp, Display, TEXT("Screenshot finished"));
 	GetWorldTimerManager().ClearTimer(ScreenshottingHandle);
-	OnScreenshotTaken.RemoveDynamic(this, &AFSPRecorder::LogSceneAnalysis);
-	OnScreenshotTaken.RemoveDynamic(this, &AFSPRecorder::LogScreenshotPlayerPosition);
+	OnScreenshotTaken.RemoveDynamic(this, &AFSPRecorder::LogSceneData);
 	Pawn->TrackRider->ShowControls(true);
 
 }
