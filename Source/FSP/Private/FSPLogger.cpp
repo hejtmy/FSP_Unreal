@@ -97,10 +97,15 @@ void AFSPLogger::LogObjectsPositions(TArray<UFSPObject*> Objects) const
 
 void AFSPLogger::LogObjectScreenPosition(FVector2D& Position, FString& Name, int32 iAnalysis)
 {
+	if(!ScreenPositionLog->IsLogOpen())
+	{
+		CreateScreenPositionLog();
+	}
 	TArray<FString> Arr;
 	Arr.Add(FString::FromInt(iAnalysis));
 	Arr.Add(Name);
-	Arr.Add(ScreenPositionToString(Position));
+	Arr.Add(FString::Printf(TEXT("%.4f"), Position.X));
+	Arr.Add(FString::Printf(TEXT("%.4f"), Position.Y));
 	ScreenPositionLog->WriteArray(Arr);
 }
 
@@ -133,7 +138,7 @@ void AFSPLogger::CreateSceneAnalysisLog() const
 
 void AFSPLogger::CreateScreenPositionLog() const
 {
-	ScreenPositionLog->CreateFile(TEXT("screen"));
+	ScreenPositionLog->CreateFile(TEXT("screen-position"));
 	ScreenPositionLog->WriteArray(TArray<FString>{"time", "iAnalysis", "object", "screen_x", "screen_y"}, 
 	true, TEXT(";"), false);
 }
