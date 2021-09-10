@@ -36,12 +36,13 @@ void AFSPRecorder::StartRecording(AFSPLogger* Logging)
 	if(ObjectManager != nullptr)
 	{
 		Logger->LogObjectsPositions(ObjectManager->GetObjects());
-	} else
+	}
+	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Object manager is not assigned to the Recorder. Cannot log object positions."));
 	}
 	
-	GetWorldTimerManager().SetTimer(SceneAnalysisLoggingHandle, this, &AFSPRecorder::LogSceneAnalysis,
+	GetWorldTimerManager().SetTimer(SceneAnalysisLoggingHandle, this, &AFSPRecorder::LogSceneData,
 		1/static_cast<float>(SceneAnalysisLoggingFrequency), true);
     Rider->StartMoving();
 	UE_LOG(LogTemp, Display, TEXT("Recording started"));
@@ -56,13 +57,43 @@ void AFSPRecorder::StartRecordingWithoutLogging()
     Rider->StartMoving();
 }
 
+void AFSPRecorder::LogSceneData()
+{
+	LogSceneAnalysis();
+	LogObjectPositions();
+	
+	UE_LOG(LogTemp, Display, TEXT("Data have been logged"));
+	iSceneRecording += 1;
+}
+
 void AFSPRecorder::LogSceneAnalysis()
 {
-	UE_LOG(LogTemp, Display, TEXT("Data have been logged"));
 	Logger->LogPosition(Pawn, iSceneRecording);
 	const TMap<FName, int32> Results = SceneAnalyzer->AnalyzeScene(Cast<APlayerController>(Pawn->Controller), Precision);
 	Logger->LogSceneAnalysis(Results, iSceneRecording);
-	iSceneRecording += 1;
+}
+
+void AFSPRecorder::LogObjectPositions()
+{
+	TArray<UFSPObject*> Objects;
+	if(ObjectManager != nullptr)
+	{
+		Objects = ObjectManager->GetObjects();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Object manager is not assigned to the Recorder. Cannot log object positions."));
+		return;
+	}
+	for(UFSPObject* Obj : Objects)
+	{
+		// gets the positiosn
+		FVector2D Out;
+		SceneAnalyzer->GetScreenPosition(Cast<APlayerController>(Pawn->Controller), Obj, Out);
+		// logs the position
+		FString Name = Obj->ObjectName.ToString();
+		Logger->LogObjectScreenPosition(Out, Name, iSceneRecording);
+	}
 }
 
 void AFSPRecorder::LogScreenshotPlayerPosition()

@@ -45,9 +45,10 @@ public:
 	/** Starts recording without any logging **/
 	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
 	void StartRecordingWithoutLogging();
+
+	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
+	void LogSceneData();
 	
-	UFUNCTION()
-	void LogSceneAnalysis();
 
 
 	UFUNCTION(BlueprintCallable, Category="FSP")
@@ -113,7 +114,9 @@ private:
 	void CreateNextScreenshot();
 	void FinishScreenshotting();
 	void LogScreenshotPlayerPosition();
-
+	void LogSceneAnalysis();
+	void LogObjectPositions();
+	
 	// Logging
 	FTimerHandle SceneAnalysisLoggingHandle;
 	int32 iSceneRecording; //index of individual scene logs
