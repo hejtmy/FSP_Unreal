@@ -24,6 +24,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="FSP|Transformations")
 	bool bStateChanged = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Transformations")
+	UStaticMeshComponent* Mesh;
 	
 protected:
 	// Called when the game starts
