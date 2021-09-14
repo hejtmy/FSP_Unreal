@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPUnrealLogDeclarations.h"
 #include "Modules/ModuleManager.h"
 
 class FFSPModule : public IModuleInterface
