@@ -15,16 +15,15 @@ UFSPVisibilityTransformation::UFSPVisibilityTransformation()
 void UFSPVisibilityTransformation::BeginPlay()
 {
 	Super::BeginPlay();
-	Execute_ResetState(this);
+	ResetState();
 }
 
-void UFSPVisibilityTransformation::ChangeState_Implementation()
+void UFSPVisibilityTransformation::ChangeState()
 {
 	GetOwner()->SetActorHiddenInGame(bShowOnStart);
 }
 
-void UFSPVisibilityTransformation::ResetState_Implementation()
+void UFSPVisibilityTransformation::ResetState()
 {
 	GetOwner()->SetActorHiddenInGame(!bShowOnStart);
 }
-

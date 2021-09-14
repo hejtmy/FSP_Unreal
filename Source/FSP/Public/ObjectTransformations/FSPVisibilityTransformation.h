@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPTransformation.h"
 #include "Components/ActorComponent.h"
 #include "FSPTransformationInterface.h"
 #include "FSPVisibilityTransformation.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FSP_API UFSPVisibilityTransformation : public UActorComponent, public IFSPTransformationInterface
+class FSP_API UFSPVisibilityTransformation : public UFSPTransformation
 {
 	GENERATED_BODY()
 
@@ -17,8 +18,8 @@ public:
 	// Sets default values for this component's properties
 	UFSPVisibilityTransformation();
 	
-	void ChangeState_Implementation() override;
-	void ResetState_Implementation() override;
+	void ChangeState() override;
+	void ResetState() override;
 
 protected:
 	// Called when the game starts
