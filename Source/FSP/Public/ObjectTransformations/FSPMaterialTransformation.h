@@ -3,26 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPTransformation.h"
 #include "Components/ActorComponent.h"
 #include "FSPMaterialTransformation.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FSP_API UFSPMaterialTransformation : public UActorComponent
+class FSP_API UFSPMaterialTransformation : public UFSPTransformation
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
 	UFSPMaterialTransformation();
+	
+	// Transformation interface implementation -----
+	virtual void ChangeState() override;
+	virtual void ResetState() override;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformations")
+	UMaterialInterface* MaterialNew;
 
-		
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Transofrmations")
+	UMaterialInterface* MaterialDefault;
+
 };
