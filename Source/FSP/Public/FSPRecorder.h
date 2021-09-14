@@ -48,8 +48,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
 	void LogSceneData();
-	
-
 
 	UFUNCTION(BlueprintCallable, Category="FSP")
 	void StopRecording();
