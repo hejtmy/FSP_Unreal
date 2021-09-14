@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "FSPObjectManager.h"
 #include "Components/ActorComponent.h"
+#include "ObjectTransformations/FSPTransformation.h"
 #include "FSPObject.generated.h"
 
 //Forward declaration
@@ -18,20 +19,29 @@ public:
 	// Sets default values for this component's properties
 	UFSPObject();
 
-	UPROPERTY(EditAnywhere, Category="FSP")
+	UPROPERTY(EditAnywhere, Category="FSP|Object")
 	FName ObjectName;
+
+	// TRANSFORMATIONS ---------
+	UFUNCTION(BlueprintCallable, Category="FSP|Object")
+	void ChangeState();
+
+	UFUNCTION(BlueprintCallable, Category="FSP|Object")
+	void ResetState();
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="FSP|Object")
+	bool bTransformationStateChanged = false;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 private:
-	UPROPERTY();
+	UPROPERTY()
 	AFSPObjectManager* ObjectManger;
+
+	UPROPERTY()
+	TArray<UFSPTransformation*> Transformations;
 
 	AFSPObjectManager* GetObjectManger();
 };

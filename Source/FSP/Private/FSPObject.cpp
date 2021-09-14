@@ -11,10 +11,27 @@ UFSPObject::UFSPObject()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-	// ...
+	
+	//Transformations = Cast<UFSPTransformation>(GetOwner()->GetComponentsByClass(UFSPTransformation::StaticClass()));
 }
 
+void UFSPObject::ChangeState()
+{
+	for (const auto transformation : Transformations)
+	{
+		transformation->ChangeState();
+	}
+	bTransformationStateChanged = true;
+}
+
+void UFSPObject::ResetState()
+{
+	for (const auto transformation : Transformations)
+	{
+		transformation->ResetState();
+	}
+	bTransformationStateChanged = false;
+}
 
 // Called when the game starts
 void UFSPObject::BeginPlay()
@@ -23,12 +40,7 @@ void UFSPObject::BeginPlay()
 	ObjectManger = GetObjectManger();
 	if(ObjectManger == nullptr) return;
 	ObjectManger->AddObject(this);
-}
-
-// Called every frame
-void UFSPObject::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	GetOwner()->GetComponents<UFSPTransformation>(Transformations);
 }
 
 AFSPObjectManager* UFSPObject::GetObjectManger()

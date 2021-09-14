@@ -14,12 +14,12 @@ UFSPTransformation::UFSPTransformation()
 
 void UFSPTransformation::ChangeState()
 {
-	UE_LOG(LogFSP, Display, TEXT("Object state changing"));
+	bStateChanged = true;
 }
 
 void UFSPTransformation::ResetState()
 {
-	UE_LOG(LogFSP, Display, TEXT("Object state resetting"));
+	bStateChanged = false;
 }
 
 // Called when the game starts

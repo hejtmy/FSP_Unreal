@@ -21,6 +21,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Transformations")
 	virtual void ResetState();
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="FSP|Transformations")
+	bool bStateChanged = false;
 	
 protected:
 	// Called when the game starts

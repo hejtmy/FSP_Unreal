@@ -21,9 +21,11 @@ void UFSPVisibilityTransformation::BeginPlay()
 void UFSPVisibilityTransformation::ChangeState()
 {
 	GetOwner()->SetActorHiddenInGame(bShowOnStart);
+	Super::ChangeState();
 }
 
 void UFSPVisibilityTransformation::ResetState()
 {
 	GetOwner()->SetActorHiddenInGame(!bShowOnStart);
+	Super::ResetState();
 }
