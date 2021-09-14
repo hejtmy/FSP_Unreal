@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPTransformation.h"
 #include "FSPTransformationInterface.h"
 #include "Components/ActorComponent.h"
 #include "FSPTransformTransformation.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FSP_API UFSPTransformTransformation : public UActorComponent, public IFSPTransformationInterface
+class FSP_API UFSPTransformTransformation : public UFSPTransformation
 {
 	GENERATED_BODY()
 
@@ -24,21 +25,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
 	FVector TargetLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
-	FVector TargetRotation;
+	FRotator TargetRotation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
 	FVector TargetScale;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
-	bool ChangeLocation = false;
+	bool bChangeLocation = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
-	bool ChangeRotation = false;
+	bool bChangeRotation = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
-	bool ChangeScale = false;
+	bool bChangeScale = false;
 
 public:
 	// Transformation interface implementation -----
-	virtual void ChangeState_Implementation() override;
-	virtual void ResetState_Implementation() override;
+	void ChangeState() override;
+	void ResetState() override;
 	
 private:
 	FVector OriginalLocation;

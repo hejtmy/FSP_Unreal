@@ -9,7 +9,6 @@ UFSPTransformTransformation::UFSPTransformTransformation()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 // Called when the game starts
 void UFSPTransformTransformation::BeginPlay()
 {
@@ -19,14 +18,27 @@ void UFSPTransformTransformation::BeginPlay()
 	OriginalScale = GetOwner()->GetActorScale();
 }
 
-void UFSPTransformTransformation::ChangeState_Implementation()
+void UFSPTransformTransformation::ChangeState()
 {
-	IFSPTransformationInterface::ChangeState();
+	if(bChangeLocation)
+	{
+		GetOwner()->SetActorLocation(TargetLocation);
+	}
+	if(bChangeRotation)
+	{
+		GetOwner()->SetActorRotation(TargetRotation);
+	}
+	if(bChangeScale)
+	{
+		GetOwner()->SetActorScale3D(TargetScale);
+	}
+	Super::ChangeState();
 }
 
-void UFSPTransformTransformation::ResetState_Implementation()
+void UFSPTransformTransformation::ResetState()
 {
 	GetOwner()->SetActorLocation(OriginalLocation);
 	GetOwner()->SetActorRotation(OriginalRotation);
 	GetOwner()->SetActorScale3D(OriginalScale);
+	Super::ResetState();
 }
