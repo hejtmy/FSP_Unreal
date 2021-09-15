@@ -19,6 +19,10 @@
 			"Name": "FSP",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "FSPEditor",
+			"Type": "Editor"
 		}
 	]
 }
