@@ -30,6 +30,22 @@ TArray<UFSPObject*> AFSPObjectManager::GetObjects() const
 	return Result;
 }
 
+void AFSPObjectManager::ApplyTransformations()
+{
+	for (const auto object : GetObjects())
+	{
+		object->ApplyTransformations();
+	}
+}
+
+void AFSPObjectManager::ResetTransformations()
+{
+	for (const auto object : GetObjects())
+	{
+		object->ResetTransformations();
+	}
+}
+
 // Called when the game starts or when spawned
 void AFSPObjectManager::BeginPlay()
 {
