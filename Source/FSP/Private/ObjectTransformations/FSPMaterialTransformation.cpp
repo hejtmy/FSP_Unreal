@@ -13,28 +13,25 @@ UFSPMaterialTransformation::UFSPMaterialTransformation()
 
 void UFSPMaterialTransformation::ChangeState()
 {
+	Super::ChangeState();
 	if(Mesh != nullptr)
 	{
+		MaterialDefault = Mesh->GetMaterial(0);
 		Mesh->SetMaterial(0, MaterialNew);
 	}
-	Super::ChangeState();
 }
 
 void UFSPMaterialTransformation::ResetState()
 {
+	Super::ResetState();
 	if(Mesh != nullptr)
 	{
 		Mesh->SetMaterial(0, MaterialDefault);
 	}
-	Super::ResetState();
 }
 
 // Called when the game starts
 void UFSPMaterialTransformation::BeginPlay()
 {
 	Super::BeginPlay();
-	if(Mesh != nullptr)
-	{
-		MaterialDefault = Mesh->GetMaterial(0);
-	}
 }
