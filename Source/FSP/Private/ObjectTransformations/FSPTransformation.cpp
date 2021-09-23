@@ -14,11 +14,19 @@ UFSPTransformation::UFSPTransformation()
 
 void UFSPTransformation::ChangeState()
 {
+	if(Mesh == nullptr)
+	{
+		SetMesh();
+	}
 	bStateChanged = true;
 }
 
 void UFSPTransformation::ResetState()
 {
+	if(Mesh == nullptr)
+	{
+		SetMesh();
+	}
 	bStateChanged = false;
 }
 
@@ -26,6 +34,11 @@ void UFSPTransformation::ResetState()
 void UFSPTransformation::BeginPlay()
 {
 	Super::BeginPlay();
+	SetMesh();
+}
+
+void UFSPTransformation::SetMesh()
+{
 	TArray<UStaticMeshComponent*> Objects;
 	GetOwner()->GetComponents<UStaticMeshComponent>(Objects);
 	if(Objects.Num() <= 0)
@@ -36,7 +49,7 @@ void UFSPTransformation::BeginPlay()
 	{
 		Mesh = Objects[0];
 	}
-	if(Objects.Num() > 0)
+	if(Objects.Num() > 1)
 	{
 		UE_LOG(LogFSP, Display, TEXT("The object %s has multiple meshes, only will be modifying the first one"),
 			*GetOwner()->GetName());
