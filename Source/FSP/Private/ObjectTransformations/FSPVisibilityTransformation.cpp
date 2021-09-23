@@ -20,12 +20,14 @@ void UFSPVisibilityTransformation::BeginPlay()
 
 void UFSPVisibilityTransformation::ChangeState()
 {
-	GetOwner()->SetActorHiddenInGame(bShowOnStart);
 	Super::ChangeState();
+	GetOwner()->SetActorHiddenInGame(bShowOnStart);
+	GetOwner()->SetIsTemporarilyHiddenInEditor(bShowOnStart);
 }
 
 void UFSPVisibilityTransformation::ResetState()
 {
-	GetOwner()->SetActorHiddenInGame(!bShowOnStart);
 	Super::ResetState();
+	GetOwner()->SetActorHiddenInGame(!bShowOnStart);
+	GetOwner()->SetIsTemporarilyHiddenInEditor(!bShowOnStart);
 }
