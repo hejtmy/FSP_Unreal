@@ -13,13 +13,13 @@ UFSPTransformTransformation::UFSPTransformTransformation()
 void UFSPTransformTransformation::BeginPlay()
 {
 	Super::BeginPlay();
-	OriginalLocation = GetOwner()->GetActorLocation();
-	OriginalRotation = GetOwner()->GetActorRotation();
-	OriginalScale = GetOwner()->GetActorScale();
+	SetOriginalValues();
 }
 
 void UFSPTransformTransformation::ChangeState()
 {
+	Super::ChangeState();
+	SetOriginalValues();
 	if(bChangeLocation)
 	{
 		GetOwner()->SetActorLocation(TargetLocation);
@@ -32,13 +32,20 @@ void UFSPTransformTransformation::ChangeState()
 	{
 		GetOwner()->SetActorScale3D(TargetScale);
 	}
-	Super::ChangeState();
 }
 
 void UFSPTransformTransformation::ResetState()
 {
+	Super::ResetState();
 	GetOwner()->SetActorLocation(OriginalLocation);
 	GetOwner()->SetActorRotation(OriginalRotation);
 	GetOwner()->SetActorScale3D(OriginalScale);
-	Super::ResetState();
+}
+
+void UFSPTransformTransformation::SetOriginalValues()
+{
+	OriginalLocation = GetOwner()->GetActorLocation();
+	OriginalRotation = GetOwner()->GetActorRotation();
+	OriginalScale = GetOwner()->GetActorScale();
+
 }

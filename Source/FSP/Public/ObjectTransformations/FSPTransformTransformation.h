@@ -45,4 +45,6 @@ private:
 	FVector OriginalLocation;
 	FVector OriginalScale;
 	FRotator OriginalRotation;
+
+	void SetOriginalValues();
 };
