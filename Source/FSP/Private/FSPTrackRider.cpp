@@ -58,9 +58,13 @@ void UFSPTrackRider::StopMoving()
 
 void UFSPTrackRider::ShowControls(bool b)
 {
-	if(b) {
+	if(!WidgetControl) return;
+	if(b)
+	{
 		WidgetControl->AddToViewport();
-	} else	{
+	}
+	else
+	{
 		WidgetControl->RemoveFromParent();
 	}
 }
