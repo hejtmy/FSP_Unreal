@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "FSPCameraViewManager.h"
+#include "CameraViews/FSPCameraViewManager.h"
 
 // Sets default values
 AFSPCameraViewManager::AFSPCameraViewManager()
