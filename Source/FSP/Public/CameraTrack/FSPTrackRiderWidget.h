@@ -24,13 +24,13 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="FSP Values")
 	UFSPTrackRider* TrackRider;
 	
-	UPROPERTY(BlueprintReadWrite,meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
 	USlider* SliderTrackPosition;
 
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	USlider* SliderDuration;
 
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* ButtonGo;
 
 public:
