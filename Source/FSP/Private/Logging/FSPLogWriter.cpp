@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "FSPLogWriter.h"
+#include "Logging/FSPLogWriter.h"
 
 FSPLogWriter::FSPLogWriter(FString Prefix, FString LogName, FString Timestamp)
 {

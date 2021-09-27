@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FSPInGamePauseMenu.h"
+#include "UI/FSPInGamePauseMenu.h"
 #include "FSPObjectManager.h"
 #include "FSPRecorder.h"
+#include "Logging/FSPLogger.h"
 #include "GameFramework/Actor.h"
 #include "FSPManager.generated.h"
 
