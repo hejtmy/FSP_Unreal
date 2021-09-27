@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "FSPTrackRider.h"
-#include "FSPTrack.h"
+#include "CameraTrack/FSPTrackRider.h"
+#include "CameraTrack/FSPTrack.h"
 #include "CineCameraComponent.h"
 #include "FSPPawn.generated.h"
 

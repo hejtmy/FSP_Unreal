@@ -2,6 +2,8 @@
 
 #include "FSPPawn.h"
 
+#include "CameraTrack/FSPTrackRider.h"
+
 // Sets default values
 AFSPPawn::AFSPPawn()
 {
