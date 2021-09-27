@@ -3,6 +3,7 @@
 #include "FSPTrackRider.h"
 
 #include "FSPTrackRiderWidget.h"
+#include "FSPUnrealLogDeclarations.h"
 
 // Sets default values for this component's properties
 UFSPTrackRider::UFSPTrackRider()
@@ -71,6 +72,11 @@ void UFSPTrackRider::ShowControls(bool b)
 
 void UFSPTrackRider::SetTrackPosition(float TrackRatio)
 {
+	if(!IsValid(Track))
+	{
+		UE_LOG(FSP, Warning, TEXT("No track has been set in the track rider component. Please select correct track"));
+		return;
+	}
 	TrackRatio = FMath::Clamp<float>(TrackRatio, 0, 1);
 
 	FVector Location;
