@@ -24,11 +24,21 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 			SVerticalBox::Slot()
 			.AutoHeight()
 			.HAlign(HAlign_Center)
-			.Padding(10)
+			.Padding(5)
 			[
 				SNew(SButton)
 				.Text(LOCTEXT("FSPEditorEdModeInitializeBtn", "Initialize FSP"))
 				.OnClicked(this, &FFSPEditorEdModeToolkit::OnFSPInitialize)
+			] +
+			SVerticalBox::Slot()
+			.AutoHeight()
+			.HAlign(HAlign_Center)
+			.Padding(5)
+			[
+				SNew(STextBlock)
+				.Text(this, &FFSPEditorEdModeToolkit::GetInitializationMessage)
+				//.Text_Lambda([this]()->FFSPEditorEdModeToolkit::GetInitializationMessage)
+				//.Text(LOCTEXT("FSPEditorEdModeInitializeMessage", "Not initialized"))
 			]
 		]
 	;
@@ -124,6 +134,7 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 		
 }
 
+
 FName FFSPEditorEdModeToolkit::GetToolkitFName() const
 {
 	return FName("FSPEditorEdMode");
@@ -136,8 +147,16 @@ FText FFSPEditorEdModeToolkit::GetBaseToolkitName() const
 
 FReply FFSPEditorEdModeToolkit::OnFSPInitialize()
 {
-	static_cast<FFSPEditorEdMode*>(GetEditorMode())->FSPInitialize();
+	MessageInitialization = static_cast<FFSPEditorEdMode*>(GetEditorMode())->FSPInitialize();
 	return FReply::Handled();
+}
+
+FText FFSPEditorEdModeToolkit::GetInitializationMessage() const
+{
+	const FString Message = (MessageInitialization.IsEmpty()) ? TEXT("Not initialized") : MessageInitialization;
+	return FText::FromString(Message);
+	//return FText::Format(LOCTEXT("FSPEditorEdModeInitializeMessage", "{0}"), Message);
+	//LOCTEXT("FSPEditorEdModeInitializeMessage", Message);
 }
 
 class FEdMode* FFSPEditorEdModeToolkit::GetEditorMode() const

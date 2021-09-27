@@ -6,6 +6,9 @@
 #include "FSPEditorEdModeToolkit.h"
 #include "Toolkits/ToolkitManager.h"
 #include "EditorModeManager.h"
+#include "FSPEditorUnrealLogDeclarations.h"
+#include "FSPGameMode.h"
+#include "GameFramework/WorldSettings.h"
 #include "Kismet/GameplayStatics.h"
 
 const FEditorModeID FFSPEditorEdMode::EM_FSPEditorEdModeId = TEXT("EM_FSPEditorEdModeId");
@@ -48,14 +51,14 @@ bool FFSPEditorEdMode::UsesToolkits() const
 	return true;
 }
 
-void FFSPEditorEdMode::FSPInitialize()
+FString FFSPEditorEdMode::FSPInitialize()
 {
 	struct HelperFuncs
 	{
-		static TArray<AActor*> FindActors(TSubclassOf<AActor> MyClass, UWorld* World)
+		static TArray<AActor*> FindActors(TSubclassOf<AActor> Class, UWorld* World)
 		{
 			static TArray<AActor*> FoundActors;
-			UGameplayStatics::GetAllActorsOfClass(World, MyClass, FoundActors);
+			UGameplayStatics::GetAllActorsOfClass(World, Class, FoundActors);
 			return FoundActors;
 		}
 		static void ClearActors(TArray<AActor*> Actors)
@@ -67,11 +70,12 @@ void FFSPEditorEdMode::FSPInitialize()
 				Actor->Destroy();
 			}
 		}
-		static AActor* CreateSingleInstance(const TSubclassOf<AActor> MyClass, UWorld* World)
+		static AActor* CreateSingleInstance(const TSubclassOf<AActor> SpawnClass, const TSubclassOf<AActor> ParentClass,
+			UWorld* World)
 		{
-			const TArray<AActor*> Objects = FindActors(MyClass,World);
+			const TArray<AActor*> Objects = FindActors(ParentClass, World);
 			ClearActors(Objects);
-			AActor* Object = World->SpawnActor(MyClass);
+			AActor* Object = World->SpawnActor(SpawnClass);
 			return Object;
 		}
 	};
@@ -83,21 +87,39 @@ void FFSPEditorEdMode::FSPInitialize()
 	//TArray<AActor*> ObjectManagers = HelperFuncs::FindActors(AFSPObjectManager::StaticClass(), GetWorld());
 	//HelperFuncs::ClearActors(ObjectManagers);
 	//AActor* ObjectManager = GetWorld()->SpawnActor<AFSPObjectManager>();
-	ObjectManager = static_cast<AFSPObjectManager*>(HelperFuncs::CreateSingleInstance(AFSPObjectManager::StaticClass(), GetWorld()));
-	ObjectManager->SetFolderPath(FolderPath);
+	UWorld* World =	GetWorld();
+	//AGameModeBase* GameMode = UGameplayStatics::GetGameMode(World);
+	//AGameModeBase* GameMode = World->GetAuthGameMode();
+	const TSubclassOf<AGameModeBase> GameMode = World->GetWorldSettings()->DefaultGameMode;
+	UE_LOG(FSPEditor, Display, TEXT("Game mode found %d - %d"), (GameMode != nullptr),
+		GameMode->IsChildOf(AFSPGameMode::StaticClass()));
 	
-	// FSP recorder
-	Recorder = static_cast<AFSPRecorder*>(HelperFuncs::CreateSingleInstance(AFSPRecorder::StaticClass(), GetWorld()));
+	if(!GameMode->IsChildOf(AFSPGameMode::StaticClass()))
+	{
+		return TEXT("Game mode not set to a valid FSP game mode");
+	}
+
+	TSubclassOf<AFSPGameMode> FSPGameModeType = *GameMode;
+	
+	AFSPGameMode* FSPGameMode = NewObject<AFSPGameMode>(World, FSPGameModeType);
+	UE_LOG(FSPEditor, Display, TEXT("%s"), *(FSPGameMode->Manager->GetClass()->GetName()));
+	UE_LOG(FSPEditor, Display, TEXT("%d"), (FSPGameMode->Manager->IsChildOf(AFSPManager::StaticClass())));
+
+	ObjectManager = static_cast<AFSPObjectManager*>(HelperFuncs::CreateSingleInstance(
+		FSPGameMode->Manager, AFSPObjectManager::StaticClass(), World));
+	ObjectManager->SetFolderPath(FolderPath);
+
+	Recorder = static_cast<AFSPRecorder*>(HelperFuncs::CreateSingleInstance(
+		FSPGameMode->Recorder, AFSPRecorder::StaticClass(), World));
 	Recorder->SetFolderPath(FolderPath);
 	Recorder->ObjectManager = ObjectManager;
 
 	// FSP logger
-	Logger = static_cast<AFSPLogger*>(HelperFuncs::CreateSingleInstance(AFSPLogger::StaticClass(), GetWorld()));
+	Logger = static_cast<AFSPLogger*>(HelperFuncs::CreateSingleInstance(FSPGameMode->Logger,
+		AFSPLogger::StaticClass(), World));
 	Logger->SetFolderPath(FolderPath);
 
-	// FSP pawn
-
-	// set game mode
+	return TEXT("FSP initialized");
 }
 
 bool FFSPEditorEdMode::IsInitialized() const

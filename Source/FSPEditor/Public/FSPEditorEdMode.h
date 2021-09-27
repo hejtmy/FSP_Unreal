@@ -26,7 +26,7 @@ public:
 
 	// Initialization panel
 public:
-	void FSPInitialize();
+	FString FSPInitialize();
 
 protected:
 	AFSPObjectManager* ObjectManager;

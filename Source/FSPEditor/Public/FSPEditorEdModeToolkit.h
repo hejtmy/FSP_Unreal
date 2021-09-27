@@ -26,5 +26,8 @@ private:
 
 	// initialization panel
 	FReply OnFSPInitialize();
+	
+	FString MessageInitialization;
+	FText GetInitializationMessage() const;
 	// 
 };
