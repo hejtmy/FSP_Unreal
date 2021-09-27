@@ -51,7 +51,7 @@ void UFSPTransformation::SetMesh()
 	}
 	if(Objects.Num() > 1)
 	{
-		UE_LOG(LogFSP, Display, TEXT("The object %s has multiple meshes, only will be modifying the first one"),
+		UE_LOG(FSP, Display, TEXT("The object %s has multiple meshes, only will be modifying the first one"),
 			*GetOwner()->GetName());
 	}
 }
