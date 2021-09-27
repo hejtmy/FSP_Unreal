@@ -14,13 +14,53 @@ AFSPManager::AFSPManager()
 void AFSPManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AFSPManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+bool AFSPManager::ValidataLogger()
+{
+	if(IsValid(Logger)) return true;
+	UE_LOG(FSP, Warning, TEXT("Logger actor is not valid"));
+	return false;
+}
+
+bool AFSPManager::ValidataRecorder()
+{
+	if(IsValid(Recorder)) return true;
+	UE_LOG(FSP, Warning, TEXT("Recorder actor is not valid"));
+	return false;
+	
+}
+
+void AFSPManager::TakeScreenshots_Implementation()
+{
+	Recorder->CreateScreenshots(Logger);	
+}
+
+void AFSPManager::StopScreenshotting_Implementation()
+{
+	if(ValidataRecorder()) { return; }
+	Recorder->StopScreenshotting();
+}
+
+void AFSPManager::MakeARecording_Implementation()
+{
+	if(!(ValidataLogger() && ValidataRecorder()))
+	{
+		UE_LOG(FSP, Warning, TEXT("Objects are not valid, cannot make a recording"));
+		return;
+	}
+	Recorder->StartRecording(Logger);
+}
+
+void AFSPManager::FinishRecording_Implementation()
+{
+	if(ValidataRecorder()) return;
+	Recorder->StopRecording();
 }
 
