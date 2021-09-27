@@ -26,7 +26,7 @@ public class FSP : ModuleRules
 			new string[]
 			{
 				"Core",
-				"CinematicCamera"
+				"CinematicCamera", "UMG"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
