@@ -23,20 +23,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY()
+	USceneComponent* SceneRoot;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="FSP")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP")
 	AFSPObjectManager* ObjectManager;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="FSP")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP")
 	AFSPRecorder* Recorder;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="FSP")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP")
 	AFSPLogger* Logger;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="FSP")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP")
 	AFSPPawn* Pawn;
 
 	UFUNCTION(BlueprintNativeEvent, Category="FSP")
@@ -50,14 +53,27 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, Category="FSP")
 	void StopScreenshotting();
+
+	UFUNCTION(BlueprintCallable, Category="FSP")
+	void TogglePauseMenu();
 	
+	UFUNCTION(BlueprintNativeEvent, Category="FSP")
+	void Pause();
+
+	UFUNCTION(BlueprintNativeEvent, Category="FSP")
+	void Resume();
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="FSP|UI")
+	TSubclassOf<class UUserWidget> PauseMenuWidgetClass;
+
+	UPROPERTY()
 	UFSPInGamePauseMenu* PauseMenuWidget;
 
 
 private:
-	bool ValidataLogger();	
-	bool ValidataRecorder();	
+	bool ValidateLogger();	
+	bool ValidateRecorder();
+
+	bool bMenuOn;
 };
