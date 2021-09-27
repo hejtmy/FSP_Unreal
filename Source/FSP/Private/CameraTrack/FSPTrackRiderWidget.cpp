@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "FSPTrackRiderWidget.h"
+#include "CameraTrack/FSPTrackRiderWidget.h"
 
 void UFSPTrackRiderWidget::NativeConstruct()
 {

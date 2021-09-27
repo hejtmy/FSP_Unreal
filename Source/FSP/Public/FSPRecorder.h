@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 
-#include "FSPLogger.h"
 #include "GameFramework/Actor.h"
 #include "FSPPawn.h"
 #include "FSPSceneAnalyzer.h"
+#include "Logging/FSPLogger.h"
 #include "FSPRecorder.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FScreenshotsStateChanged);
@@ -29,6 +29,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP|Analysis")
 	AFSPObjectManager* ObjectManager;
+	
+	UPROPERTY(EditAnywhere, Category = "FSP|Required")
+	AFSPPawn* Pawn;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Analysis")
 	int32 Precision;
@@ -86,8 +89,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "FSP|Required")
-	AFSPPawn* Pawn;
+
 
 	UPROPERTY(EditAnywhere, Category="FSP|Screenshots")
 	int nScreenshots = 30;

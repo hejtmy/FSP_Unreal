@@ -18,17 +18,24 @@ public:
 	// Sets default values for this actor's properties
 	AFSPObjectManager();
 
-	UFUNCTION(BlueprintCallable, Category="FSP|Objects")
+	UFUNCTION(BlueprintCallable, Category="FSP|Object")
 	bool AddObject(UFSPObject* Object);
 
-	UFUNCTION(BlueprintGetter, Category="FSP|Objects")
+	UFUNCTION(BlueprintPure, Category="FSP|Object")
 	TArray<UFSPObject*> GetObjects() const;
+	
+	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
+	void ApplyTransformations();
 
+	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
+	void ResetTransformations();
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Objects")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Object")
 	TMap<FName, UFSPObject*> Objects;
 
 public:	

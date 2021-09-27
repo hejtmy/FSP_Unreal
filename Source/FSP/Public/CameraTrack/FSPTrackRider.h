@@ -48,7 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "FSP|UI")
 	TSubclassOf<class UUserWidget> WidgetClass;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FSP UI")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FSP|UI")
 	UFSPTrackRiderWidget* WidgetControl;
 
 	UFUNCTION(BlueprintCallable, Category = "FSP")

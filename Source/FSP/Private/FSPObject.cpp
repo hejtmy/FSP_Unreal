@@ -15,20 +15,22 @@ UFSPObject::UFSPObject()
 	//Transformations = Cast<UFSPTransformation>(GetOwner()->GetComponentsByClass(UFSPTransformation::StaticClass()));
 }
 
-void UFSPObject::ChangeState()
+void UFSPObject::ApplyTransformations()
 {
-	for (const auto transformation : Transformations)
+	GetOwner()->GetComponents<UFSPTransformation>(Transformations);
+	for (const auto Transformation : Transformations)
 	{
-		transformation->ChangeState();
+		Transformation->ChangeState();
 	}
 	bTransformationStateChanged = true;
 }
 
-void UFSPObject::ResetState()
+void UFSPObject::ResetTransformations()
 {
-	for (const auto transformation : Transformations)
+	GetOwner()->GetComponents<UFSPTransformation>(Transformations);
+	for (const auto Transformation : Transformations)
 	{
-		transformation->ResetState();
+		Transformation->ResetState();
 	}
 	bTransformationStateChanged = false;
 }
@@ -40,7 +42,6 @@ void UFSPObject::BeginPlay()
 	ObjectManger = GetObjectManger();
 	if(ObjectManger == nullptr) return;
 	ObjectManger->AddObject(this);
-	GetOwner()->GetComponents<UFSPTransformation>(Transformations);
 }
 
 AFSPObjectManager* UFSPObject::GetObjectManger()

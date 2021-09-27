@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "FSPTrackRider.h"
+#include "CameraTrack/FSPTrackRider.h"
 
-#include "FSPTrackRiderWidget.h"
+#include "CameraTrack/FSPTrackRiderWidget.h"
+#include "FSPUnrealLogDeclarations.h"
 
 // Sets default values for this component's properties
 UFSPTrackRider::UFSPTrackRider()
@@ -17,7 +18,7 @@ void UFSPTrackRider::BeginPlay()
 	bIsMoving = false;
 
 	/** Make sure asset was loaded and class was set */
-	if( !WidgetClass )
+	if(!WidgetClass)
 	{
 		return;
 	}
@@ -58,15 +59,24 @@ void UFSPTrackRider::StopMoving()
 
 void UFSPTrackRider::ShowControls(bool b)
 {
-	if(b) {
+	if(!WidgetControl) return;
+	if(b)
+	{
 		WidgetControl->AddToViewport();
-	} else	{
+	}
+	else
+	{
 		WidgetControl->RemoveFromParent();
 	}
 }
 
 void UFSPTrackRider::SetTrackPosition(float TrackRatio)
 {
+	if(!IsValid(Track))
+	{
+		UE_LOG(FSP, Warning, TEXT("No track has been set in the track rider component. Please select correct track"));
+		return;
+	}
 	TrackRatio = FMath::Clamp<float>(TrackRatio, 0, 1);
 
 	FVector Location;

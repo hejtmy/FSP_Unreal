@@ -23,11 +23,11 @@ public:
 	FName ObjectName;
 
 	// TRANSFORMATIONS ---------
-	UFUNCTION(BlueprintCallable, Category="FSP|Object")
-	void ChangeState();
+	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
+	void ApplyTransformations();
 
-	UFUNCTION(BlueprintCallable, Category="FSP|Object")
-	void ResetState();
+	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
+	void ResetTransformations();
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="FSP|Object")
 	bool bTransformationStateChanged = false;

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "FSPLogger.h"
+#include "Logging/FSPLogger.h"
 
 // Sets default values
 AFSPLogger::AFSPLogger()
