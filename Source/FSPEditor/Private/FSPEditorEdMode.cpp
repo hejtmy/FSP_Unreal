@@ -73,7 +73,9 @@ FString FFSPEditorEdMode::FSPInitialize()
 		static AActor* CreateSingleInstance(const TSubclassOf<AActor> SpawnClass, const TSubclassOf<AActor> ParentClass,
 			UWorld* World)
 		{
-			const TArray<AActor*> Objects = FindActors(ParentClass, World);
+			const TArray<AActor*> ParentObjects = FindActors(ParentClass, World);
+			ClearActors(ParentObjects);
+			const TArray<AActor*> Objects = FindActors(SpawnClass, World);
 			ClearActors(Objects);
 			AActor* Object = World->SpawnActor(SpawnClass);
 			return Object;
@@ -106,19 +108,33 @@ FString FFSPEditorEdMode::FSPInitialize()
 	UE_LOG(FSPEditor, Display, TEXT("%d"), (FSPGameMode->Manager->IsChildOf(AFSPManager::StaticClass())));
 
 	ObjectManager = static_cast<AFSPObjectManager*>(HelperFuncs::CreateSingleInstance(
-		FSPGameMode->Manager, AFSPObjectManager::StaticClass(), World));
+		FSPGameMode->ObjectManager, AFSPObjectManager::StaticClass(), World));
 	ObjectManager->SetFolderPath(FolderPath);
 
+	Pawn = static_cast<AFSPPawn*>(HelperFuncs::CreateSingleInstance(FSPGameMode->Pawn,
+		AFSPPawn::StaticClass(), World));
+	
 	Recorder = static_cast<AFSPRecorder*>(HelperFuncs::CreateSingleInstance(
 		FSPGameMode->Recorder, AFSPRecorder::StaticClass(), World));
 	Recorder->SetFolderPath(FolderPath);
 	Recorder->ObjectManager = ObjectManager;
+	Recorder->Pawn = Pawn;
 
 	// FSP logger
 	Logger = static_cast<AFSPLogger*>(HelperFuncs::CreateSingleInstance(FSPGameMode->Logger,
 		AFSPLogger::StaticClass(), World));
 	Logger->SetFolderPath(FolderPath);
-
+	
+	Manager = static_cast<AFSPManager*>(HelperFuncs::CreateSingleInstance(FSPGameMode->Manager,
+		AFSPManager::StaticClass(), World));
+	Manager->SetFolderPath(FolderPath);
+	Manager->Logger = Logger;
+	Manager->ObjectManager = ObjectManager;
+	Manager->Recorder = Recorder;
+	Manager->Pawn = Pawn;
+	
+	AddKeyMappings();
+	
 	return TEXT("FSP initialized");
 }
 

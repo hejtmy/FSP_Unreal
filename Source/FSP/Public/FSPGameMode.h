@@ -23,6 +23,9 @@ public:
 	TSubclassOf<AFSPManager> Manager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP")
+	TSubclassOf<AFSPObjectManager> ObjectManager;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP")
 	TSubclassOf<AFSPRecorder> Recorder;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP")

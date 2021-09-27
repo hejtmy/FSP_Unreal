@@ -2,7 +2,7 @@
 
 #include "FSPTrackRider.h"
 
-#include "FSPTrackRiderWidget.h"
+#include "CameraTrack/FSPTrackRiderWidget.h"
 #include "FSPUnrealLogDeclarations.h"
 
 // Sets default values for this component's properties
@@ -18,7 +18,7 @@ void UFSPTrackRider::BeginPlay()
 	bIsMoving = false;
 
 	/** Make sure asset was loaded and class was set */
-	if( !WidgetClass )
+	if(!WidgetClass)
 	{
 		return;
 	}

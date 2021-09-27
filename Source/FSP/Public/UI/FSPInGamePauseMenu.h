@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPManager.h"
 #include "Blueprint/UserWidget.h"
 #include "FSPInGamePauseMenu.generated.h"
 
@@ -13,5 +14,8 @@ UCLASS()
 class FSP_API UFSPInGamePauseMenu : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(VisibleAnywhere, Category="FSP")
+	AFSPManager* Manager;
 };

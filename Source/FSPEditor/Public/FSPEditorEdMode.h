@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EdMode.h"
+#include "FSPManager.h"
 #include "FSPObjectManager.h"
 #include "FSPRecorder.h"
 
@@ -32,8 +33,11 @@ protected:
 	AFSPObjectManager* ObjectManager;
 	AFSPRecorder* Recorder;
 	AFSPLogger* Logger;
+	AFSPManager* Manager;
+	AFSPPawn* Pawn;
 
 	bool IsInitialized() const;
+	void AddKeyMappings() const;
 	// Camera track panel
 
 	// Item transformation panel
