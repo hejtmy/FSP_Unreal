@@ -8,6 +8,7 @@
 #include "EditorModeManager.h"
 #include "FSPEditorUnrealLogDeclarations.h"
 #include "FSPGameMode.h"
+#include "GameFramework/InputSettings.h"
 #include "GameFramework/WorldSettings.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -144,4 +145,20 @@ bool FFSPEditorEdMode::IsInitialized() const
 	if(ObjectManager == nullptr) return false;
 	if(Logger == nullptr) return false;
 	return true;
+}
+
+void FFSPEditorEdMode::AddKeyMappings() const
+{
+	UInputSettings* Settings = UInputSettings::GetInputSettings();
+	if(Settings == nullptr)
+	{
+		UE_LOG(FSPEditor, Warning, TEXT("Failed to get input settings"));
+		return;
+	}
+	Settings->AddActionMapping(FInputActionKeyMapping(FName("Pause"), EKeys::Escape));
+	Settings->AddActionMapping(FInputActionKeyMapping(FName("Resume"), EKeys::Escape));
+	Settings->AddActionMapping(FInputActionKeyMapping(FName("Pause"), EKeys::E));
+	Settings->AddActionMapping(FInputActionKeyMapping(FName("Resume"), EKeys::E));
+	Settings->SaveKeyMappings();
+	UE_LOG(FSPEditor, Display, TEXT("Actions mapped"));
 }
