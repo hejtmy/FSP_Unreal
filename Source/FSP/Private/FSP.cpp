@@ -15,7 +15,7 @@ void FFSPModule::ShutdownModule()
 	// we call this function before unloading the module.
 }
 
-DEFINE_LOG_CATEGORY(LogFSP);
+DEFINE_LOG_CATEGORY(FSP);
 
 #undef LOCTEXT_NAMESPACE
 	

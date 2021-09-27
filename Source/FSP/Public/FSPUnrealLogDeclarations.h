@@ -1,4 +1,4 @@
 #pragma once
 #include "CoreMinimal.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogFSP, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(FSP, Log, All);
