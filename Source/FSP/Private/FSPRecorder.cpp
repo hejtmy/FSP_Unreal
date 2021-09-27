@@ -4,6 +4,7 @@
 #include "FSPRecorder.h"
 
 #include "HighResScreenshot.h"
+#include "CameraTrack/FSPTrackRider.h"
 
 // Sets default values for this component's properties
 AFSPRecorder::AFSPRecorder()
@@ -132,7 +133,8 @@ void AFSPRecorder::CreateScreenshots(AFSPLogger* Logging)
 	
 	LastScreenshotTrack = 0.0;
 
-	
+	// This needs to be assigned as this function 
+	this->Logger = Logging;
 	if(ObjectManager != nullptr)
 	{
 		Logger->LogObjectsPositions(ObjectManager->GetObjects());
@@ -143,7 +145,6 @@ void AFSPRecorder::CreateScreenshots(AFSPLogger* Logging)
 	}
 	
 	ResetSceneRecordingIndex();
-	this->Logger = Logging;
 
 	FTimerDelegate NextFuncDelegate;
 	NextFuncDelegate.BindLambda([&](){
