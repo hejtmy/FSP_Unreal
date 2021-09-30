@@ -32,17 +32,17 @@ TArray<UFSPObject*> AFSPObjectManager::GetObjects() const
 
 void AFSPObjectManager::ApplyTransformations()
 {
-	for (const auto object : GetObjects())
+	for (const auto Object : GetObjects())
 	{
-		object->ApplyTransformations();
+		Object->ApplyTransformations();
 	}
 }
 
 void AFSPObjectManager::ResetTransformations()
 {
-	for (const auto object : GetObjects())
+	for (const auto Object : GetObjects())
 	{
-		object->ResetTransformations();
+		Object->ResetTransformations();
 	}
 }
 
