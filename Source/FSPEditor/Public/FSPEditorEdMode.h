@@ -27,18 +27,38 @@ public:
 
 	// Initialization panel
 public:
+	
+	/** Initialize and binds manager objects and adds proper keymappings to the open scene
+	 * @return Returns message about the result to be showed in the slate
+	 **/
 	FString FSPInitialize();
 
-protected:
-	AFSPObjectManager* ObjectManager;
-	AFSPRecorder* Recorder;
-	AFSPLogger* Logger;
-	AFSPManager* Manager;
-	AFSPPawn* Pawn;
-
+	/**
+	 *
+	 */
+	bool AddCameraTrack();
+	
 	bool IsInitialized() const;
+
+	TWeakObjectPtr<AFSPObjectManager> GetObjectManager() const {return ObjectManager;}
+	TArray<AFSPTrack*> GetCameraTracks() const {return CameraTracks;}
+
+protected:
+	TWeakObjectPtr<AFSPObjectManager> ObjectManager;
+	AFSPRecorder* Recorder = nullptr;
+	AFSPLogger* Logger = nullptr;
+	AFSPManager* Manager = nullptr;
+	AFSPPawn* Pawn = nullptr;
+
+	TArray<AFSPTrack*> CameraTracks;
+	
 	void AddKeyMappings() const;
 	// Camera track panel
+
+	/*
+	 * Tries to collect existing managers and loggers into the fields. 
+	 */
+	bool TryReinitialize();
 
 	// Item transformation panel
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FSPEditorEdMode.h"
 #include "Toolkits/BaseToolkit.h"
 
 class FFSPEditorEdModeToolkit : public FModeToolkit
@@ -26,8 +27,12 @@ private:
 
 	// initialization panel
 	FReply OnFSPInitialize();
+	bool IsInitialized();
+	FReply OnCameraTrackAdd();
 	
 	FString MessageInitialization;
 	FText GetInitializationMessage() const;
-	// 
+	FText GetTransformationSummary() const;
+	FText GetTracksSummary() const;
+	FFSPEditorEdMode* GetEdMode() const;
 };

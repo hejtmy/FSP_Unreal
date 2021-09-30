@@ -10,7 +10,7 @@ void FFSPEditorModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 	FEditorModeRegistry::Get().RegisterMode<FFSPEditorEdMode>(FFSPEditorEdMode::EM_FSPEditorEdModeId,
-		LOCTEXT("FSPEditorEdModeName", "FSPEditorEdMode"), FSlateIcon(), true);
+		LOCTEXT("FSPEditorEdModeName", "FSP Editor"), FSlateIcon(), true);
 }
 
 void FFSPEditorModule::ShutdownModule()

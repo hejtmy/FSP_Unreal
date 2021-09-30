@@ -16,7 +16,6 @@ const FEditorModeID FFSPEditorEdMode::EM_FSPEditorEdModeId = TEXT("EM_FSPEditorE
 
 FFSPEditorEdMode::FFSPEditorEdMode()
 {
-
 }
 
 FFSPEditorEdMode::~FFSPEditorEdMode()
@@ -118,7 +117,7 @@ FString FFSPEditorEdMode::FSPInitialize()
 	Recorder = static_cast<AFSPRecorder*>(HelperFuncs::CreateSingleInstance(
 		FSPGameMode->Recorder, AFSPRecorder::StaticClass(), World));
 	Recorder->SetFolderPath(FolderPath);
-	Recorder->ObjectManager = ObjectManager;
+	Recorder->ObjectManager = ObjectManager.Get();
 	Recorder->Pawn = Pawn;
 
 	// FSP logger
@@ -130,7 +129,7 @@ FString FFSPEditorEdMode::FSPInitialize()
 		AFSPManager::StaticClass(), World));
 	Manager->SetFolderPath(FolderPath);
 	Manager->Logger = Logger;
-	Manager->ObjectManager = ObjectManager;
+	Manager->ObjectManager = ObjectManager.Get();
 	Manager->Recorder = Recorder;
 	Manager->Pawn = Pawn;
 	
@@ -139,11 +138,26 @@ FString FFSPEditorEdMode::FSPInitialize()
 	return TEXT("FSP initialized");
 }
 
+bool FFSPEditorEdMode::AddCameraTrack()
+{
+	if(!IsInitialized())
+	{
+		UE_LOG(FSPEditor, Display, TEXT("Initialize the FSP first"));
+		return false;
+	}
+	AFSPTrack* Track = GetWorld()->SpawnActor<AFSPTrack>();
+	if(!IsValid(Track)) return false;
+	CameraTracks.Add(Track);
+	Pawn->TrackRider->Track = Track;
+	return true;
+}
+
 bool FFSPEditorEdMode::IsInitialized() const
 {
-	if(Recorder == nullptr) return false;
-	if(ObjectManager == nullptr) return false;
-	if(Logger == nullptr) return false;
+	if(!IsValid(Recorder)) return false;
+	if(!ObjectManager.IsValid()) return false;
+	if(!IsValid(Logger)) return false;
+	if(!IsValid(Pawn)) return false;
 	return true;
 }
 
@@ -161,4 +175,9 @@ void FFSPEditorEdMode::AddKeyMappings() const
 	Settings->AddActionMapping(FInputActionKeyMapping(FName("Resume"), EKeys::E));
 	Settings->SaveKeyMappings();
 	UE_LOG(FSPEditor, Display, TEXT("Actions mapped"));
+}
+
+bool FFSPEditorEdMode::TryReinitialize()
+{
+	return true;
 }
