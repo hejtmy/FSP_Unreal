@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EdMode.h"
+#include "FSPGameMode.h"
 #include "FSPManager.h"
 #include "FSPObjectManager.h"
 #include "FSPRecorder.h"
@@ -45,10 +46,10 @@ public:
 
 protected:
 	TWeakObjectPtr<AFSPObjectManager> ObjectManager;
-	AFSPRecorder* Recorder = nullptr;
-	AFSPLogger* Logger = nullptr;
-	AFSPManager* Manager = nullptr;
-	AFSPPawn* Pawn = nullptr;
+	TWeakObjectPtr<AFSPRecorder> Recorder;
+	TWeakObjectPtr<AFSPLogger> Logger;
+	TWeakObjectPtr<AFSPManager> Manager;
+	TWeakObjectPtr<AFSPPawn> Pawn;
 
 	TArray<AFSPTrack*> CameraTracks;
 	
@@ -59,6 +60,14 @@ protected:
 	 * Tries to collect existing managers and loggers into the fields. 
 	 */
 	bool TryReinitialize();
+	AFSPGameMode* GetGameMode(UWorld* World) const;
 
 	// Item transformation panel
+private:
+	
+	static TArray<AActor*> FindActors(const TSubclassOf<AActor> Class, const UWorld* World);
+	void AssignRelations() const;
+
 };
+
+

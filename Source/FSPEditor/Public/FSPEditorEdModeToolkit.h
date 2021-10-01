@@ -27,11 +27,12 @@ private:
 
 	// initialization panel
 	FReply OnFSPInitialize();
-	bool IsInitialized();
+	bool IsInitialized() const;
 	FReply OnCameraTrackAdd();
 	
 	FString MessageInitialization;
 	FText GetInitializationMessage() const;
+	FText GetIsInitializedSummary() const;
 	FText GetTransformationSummary() const;
 	FText GetTracksSummary() const;
 	FFSPEditorEdMode* GetEdMode() const;

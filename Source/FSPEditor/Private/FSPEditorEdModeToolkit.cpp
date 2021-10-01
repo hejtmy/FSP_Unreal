@@ -28,7 +28,7 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 			SNew(SVerticalBox) +
 				// ---------- INITIALIZATION ----------------
 				SVerticalBox::Slot()
-				.AutoHeight()
+				.FillHeight(0.2)
 				.HAlign(HAlign_Center)
 				.Padding(5)
 				[
@@ -37,8 +37,12 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 						.HAlign(HAlign_Center)
 						[
 							SNew(SButton)
-							.Text(LOCTEXT("FSPEditorEdModeInitializeBtn", "Initialize FSP"))
 							.OnClicked(this, &FFSPEditorEdModeToolkit::OnFSPInitialize)
+							.HAlign(HAlign_Center)
+							[
+								SNew(STextBlock)
+								.Text(LOCTEXT("FSPEditorEdModeInitializeBtn", "Initialize FSP"))
+							]
 						] +
 						SVerticalBox::Slot()
 						.AutoHeight()
@@ -46,44 +50,50 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 						.Padding(5)
 						[
 							SNew(STextBlock)
-							.Text(this, &FFSPEditorEdModeToolkit::GetInitializationMessage)
+							.Text(this, &FFSPEditorEdModeToolkit::GetIsInitializedSummary)
 							//.Text_Lambda([this]()->FFSPEditorEdModeToolkit::GetInitializationMessage)
 							//.Text(LOCTEXT("FSPEditorEdModeInitializeMessage", "Not initialized"))
 						]
 				] +
-				SVerticalBox::Slot()
-				[
-					SNew(SSeparator)
-				] +
 				// -------- CAMERA TRACK CONTROLS -----------------
 				SVerticalBox::Slot()
-				.AutoHeight()
+				.FillHeight(0.2)
 				.HAlign(HAlign_Center)
 				[
 					SNew(SVerticalBox)
 					.IsEnabled(&FFSPEditorEdModeToolkit::IsInitialized) +
 					SVerticalBox::Slot()
+					.FillHeight(0.2)
+					[
+						SNew(STextBlock)
+						.Text(LOCTEXT("FSPEditorEdModeCameraTrackTitleText","Camera controls track"))
+					] +
+					SVerticalBox::Slot()
+					.FillHeight(0.4)
 					[
 						SNew(SButton)
 						.Text(LOCTEXT("FSPEditorEdModeAddCameraTrackBtn", "Add Camera Track"))
 						.OnClicked(this, &FFSPEditorEdModeToolkit::OnCameraTrackAdd)
 					] +
 					SVerticalBox::Slot()
+					.AutoHeight()
 					[
 						SNew(STextBlock)
 						.Text(this, &FFSPEditorEdModeToolkit::GetTracksSummary)
 					]
 				] +
 				SVerticalBox::Slot()
-				[
-					SNew(SSeparator)
-				] +
-				SVerticalBox::Slot()
-				.AutoHeight()
+				.FillHeight(0.3)
 				.HAlign(HAlign_Center)
 				[
 					SNew(SVerticalBox)
 					.IsEnabled(&FFSPEditorEdModeToolkit::IsInitialized) +
+					SVerticalBox::Slot()
+					.FillHeight(0.2)
+					[
+						SNew(STextBlock)
+						.Text(LOCTEXT("FSPEditorEdModeObjectControlsTitleText","Object controls"))
+					] +
 					SVerticalBox::Slot()
 					[
 						SNew(STextBlock)
@@ -199,7 +209,7 @@ FReply FFSPEditorEdModeToolkit::OnFSPInitialize()
 	return FReply::Handled();
 }
 
-bool FFSPEditorEdModeToolkit::IsInitialized()
+bool FFSPEditorEdModeToolkit::IsInitialized() const
 {
 	return GetEdMode()->IsInitialized();
 }
@@ -215,6 +225,12 @@ FText FFSPEditorEdModeToolkit::GetInitializationMessage() const
 {
 	const FString Message = (MessageInitialization.IsEmpty()) ? TEXT("Not initialized") : MessageInitialization;
 	return FText::FromString(Message);
+}
+
+FText FFSPEditorEdModeToolkit::GetIsInitializedSummary() const
+{
+	return FText::FromString(IsInitialized() ? TEXT("The FSP is initialized and ready to use") :
+		TEXT("FSP is not initalized"));
 }
 
 FText FFSPEditorEdModeToolkit::GetTransformationSummary() const
