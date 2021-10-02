@@ -35,6 +35,8 @@ void FFSPEditorEdMode::Enter()
 	}
 	
 	TryReinitialize();
+	CollectCameraTracks();
+	CollectFSPObjects();
 }
 
 void FFSPEditorEdMode::Exit()
@@ -132,8 +134,8 @@ bool FFSPEditorEdMode::AddCameraTrack()
 	}
 	AFSPTrack* Track = GetWorld()->SpawnActor<AFSPTrack>();
 	if(!IsValid(Track)) return false;
-	CameraTracks.Add(Track);
 	Pawn->TrackRider->Track = Track;
+	CollectCameraTracks();
 	return true;
 }
 
@@ -144,6 +146,13 @@ bool FFSPEditorEdMode::IsInitialized() const
 	if(!Logger.IsValid()) return false;
 	if(!Pawn.IsValid()) return false;
 	if(!Manager.IsValid()) return false;
+	return true;
+}
+
+bool FFSPEditorEdMode::GetFSPObjects(TArray<UFSPObject*> &Out) const
+{
+	CollectFSPObjects();
+	Out = ObjectManager->GetObjects();
 	return true;
 }
 
@@ -222,6 +231,54 @@ AFSPGameMode* FFSPEditorEdMode::GetGameMode(UWorld* World) const
 	const TSubclassOf<AFSPGameMode> FSPGameModeType = *GameMode;
 	AFSPGameMode* FSPGameMode = NewObject<AFSPGameMode>(World, FSPGameModeType);
 	return FSPGameMode;
+}
+
+bool FFSPEditorEdMode::ApplyObjectsTransformations()
+{
+	if(!IsInitialized())
+	{
+		UE_LOG(FSPEditor, Warning, TEXT("Object manager is not valid."))
+		return false;
+	}
+	ObjectManager->ApplyTransformations();
+	return true;
+}
+
+bool FFSPEditorEdMode::ResetObjectsTransformations()
+{
+	if(!IsInitialized())
+	{
+		UE_LOG(FSPEditor, Warning, TEXT("Object manager is not valid."))
+		return false;
+	}
+	ObjectManager->ResetTransformations();
+	return true;
+}
+
+void FFSPEditorEdMode::CollectCameraTracks()
+{
+	const UWorld* World = GetWorld();
+	TArray<AActor*> Tracks = FindActors(AFSPTrack::StaticClass(), World);
+	CameraTracks.Empty();
+	for(AActor* TrackActor : Tracks)
+	{
+		AFSPTrack* Track = Cast<AFSPTrack>(TrackActor);
+		if(Track)
+		{
+			CameraTracks.Add(Track);
+		}
+	}
+}
+
+void FFSPEditorEdMode::CollectFSPObjects() const
+{
+	//TODO - THis is extremely slow operation, think about another one
+	if(!ObjectManager.IsValid())
+	{
+		UE_LOG(FSPEditor, Warning, TEXT("Object manager is not valid. Cannot search for objects"))
+		return;
+	}
+	ObjectManager->CollectAllLevelObjects();
 }
 
 TArray<AActor*> FFSPEditorEdMode::FindActors(const TSubclassOf<AActor> Class, const UWorld* World)

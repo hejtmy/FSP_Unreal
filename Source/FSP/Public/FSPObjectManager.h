@@ -29,6 +29,19 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
 	void ResetTransformations();
+
+	/**
+	 * Iterates through all actors in the level and checks if they implement FSP object. If so,
+	 * this will enforce them registering with this object.
+	 * 
+	 */
+	void CollectAllLevelObjects();
+	
+	/**
+	 * This abuses the fact that objects automatically register when begin play is called. So this function basically
+	 * just hits play and quits again.
+	 */
+	void FakeCollectAllLevelObjects();
 	
 protected:
 	// Called when the game starts or when spawned

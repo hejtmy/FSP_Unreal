@@ -2,7 +2,10 @@
 
 
 #include "FSPObjectManager.h"
+
+#include "EditorLevelUtils.h"
 #include "FSPObject.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFSPObjectManager::AFSPObjectManager()
@@ -44,6 +47,27 @@ void AFSPObjectManager::ResetTransformations()
 	{
 		Object->ResetTransformations();
 	}
+}
+
+void AFSPObjectManager::CollectAllLevelObjects()
+{
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Actors);
+	for (const auto Actor : Actors)
+	{
+		UFSPObject* Component = Actor->FindComponentByClass<UFSPObject>();
+		if(Component)
+		{
+			this->AddObject(Component);
+		}
+	}
+}
+
+void AFSPObjectManager::FakeCollectAllLevelObjects()
+{
+	UE_LOG(FSP, Warning, TEXT("This function is not implemented yet"));
+#if WITH_EDITOR
+#endif
 }
 
 // Called when the game starts or when spawned

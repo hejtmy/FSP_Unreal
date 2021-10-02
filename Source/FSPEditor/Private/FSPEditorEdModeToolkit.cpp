@@ -34,6 +34,7 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 				[
 					SNew(SVerticalBox) +
 						SVerticalBox::Slot()
+						.FillHeight(0.1)
 						.HAlign(HAlign_Center)
 						[
 							SNew(SButton)
@@ -66,20 +67,32 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 					.FillHeight(0.2)
 					[
 						SNew(STextBlock)
-						.Text(LOCTEXT("FSPEditorEdModeCameraTrackTitleText","Camera controls track"))
+						.Text(LOCTEXT("FSPEditorEdModeCameraTrackTitleText", "Camera controls track"))
 					] +
 					SVerticalBox::Slot()
-					.FillHeight(0.4)
+					.FillHeight(0.1)
 					[
 						SNew(SButton)
 						.Text(LOCTEXT("FSPEditorEdModeAddCameraTrackBtn", "Add Camera Track"))
 						.OnClicked(this, &FFSPEditorEdModeToolkit::OnCameraTrackAdd)
 					] +
 					SVerticalBox::Slot()
-					.AutoHeight()
+					.FillHeight(0.1)
 					[
 						SNew(STextBlock)
-						.Text(this, &FFSPEditorEdModeToolkit::GetTracksSummary)
+						.Text(this, &FFSPEditorEdModeToolkit::GetCameraTracksSummary)
+					] +
+					SVerticalBox::Slot()
+					.FillHeight(0.2)
+					[
+						SNullWidget::NullWidget
+						//SNew(SNumericDropDown<int>)
+						//.DropDownValues(FFSPEditorEdModeToolkit::GetCameraTracksOptions())
+					] + 
+					
+					SVerticalBox::Slot()
+					[
+						SNullWidget::NullWidget
 					]
 				] +
 				SVerticalBox::Slot()
@@ -95,6 +108,23 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 						.Text(LOCTEXT("FSPEditorEdModeObjectControlsTitleText","Object controls"))
 					] +
 					SVerticalBox::Slot()
+					[
+						SNew(SHorizontalBox) +
+						SHorizontalBox::Slot()
+						[
+							SNew(SButton)
+							.Text(LOCTEXT("FSPEditorEdModeObjectControlsResetAllBtn","Reset all objects"))
+							.OnClicked(this, &FFSPEditorEdModeToolkit::OnObjectsReset)
+						] +
+						SHorizontalBox::Slot()
+						[
+							SNew(SButton)
+							.Text(LOCTEXT("FSPEditorEdModeObjectControlsModifyAllBtn","transform all objects"))
+							.OnClicked(this, &FFSPEditorEdModeToolkit::OnObjectsModify)
+						]
+					] +
+					SVerticalBox::Slot()
+					.AutoHeight()
 					[
 						SNew(STextBlock)
 						.Text(this, &FFSPEditorEdModeToolkit::GetTransformationSummary)
@@ -252,14 +282,44 @@ FText FFSPEditorEdModeToolkit::GetTransformationSummary() const
 	return FText::FromString(Message);
 }
 
-FText FFSPEditorEdModeToolkit::GetTracksSummary() const
+FText FFSPEditorEdModeToolkit::GetCameraTracksSummary() const
 {
-	auto Tracks = GetEdMode()->GetCameraTracks();
-	int32 nTracks = Tracks.Num();
+	const auto Tracks = GetEdMode()->GetCameraTracks();
+	const int32 nTracks = Tracks.Num();
 	FFormatNamedArguments Args;
 	Args.Add(TEXT("NumberOfTracks"), FText::AsNumber(nTracks));
 	return FText::Format(LOCTEXT("FSPEditorEdModeCameraTrackSummaryTxt", "{NumberOfTracks}"), Args);
 }
+
+FReply FFSPEditorEdModeToolkit::OnObjectsModify() const
+{
+	return GetEdMode()->ApplyObjectsTransformations() ? FReply::Handled() : FReply::Unhandled();
+}
+
+FReply FFSPEditorEdModeToolkit::OnObjectsReset() const
+{
+	return GetEdMode()->ResetObjectsTransformations() ? FReply::Handled() : FReply::Unhandled();
+}
+
+FReply FFSPEditorEdModeToolkit::OnCameraTrackSelect()
+{
+	 return FReply::Unhandled(); 
+}
+
+/*
+TArray<SNumericDropDown<int>::FNamedValue> FFSPEditorEdModeToolkit::GetCameraTracksOptions() const
+{
+	TArray<SNumericDropDown<int>::FNamedValue> CameraTracks;
+	int i = 0;
+	for(auto Track : GetEdMode()->GetCameraTracks())
+	{
+		CameraTracks.Add(SNumericDropDown<int>::FNamedValue(i, LOCTEXT("track", "first"),
+		LOCTEXT("SnapDescription_OneThousandth", "Set snap to 1/1000th")));
+		i++;	
+	}
+	return CameraTracks;
+}
+*/
 
 FFSPEditorEdMode* FFSPEditorEdModeToolkit::GetEdMode() const
 {

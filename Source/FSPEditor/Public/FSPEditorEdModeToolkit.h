@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "FSPEditorEdMode.h"
 #include "Toolkits/BaseToolkit.h"
+#include "Widgets/Input/SNumericDropDown.h"
 
 class FFSPEditorEdModeToolkit : public FModeToolkit
 {
@@ -28,12 +29,20 @@ private:
 	// initialization panel
 	FReply OnFSPInitialize();
 	bool IsInitialized() const;
-	FReply OnCameraTrackAdd();
-	
 	FString MessageInitialization;
 	FText GetInitializationMessage() const;
 	FText GetIsInitializedSummary() const;
+		
+	// Camera edits
+	FReply OnCameraTrackAdd();
+	FReply OnCameraTrackSelect();
+	FText GetCameraTracksSummary() const;
+
+	// Object controls
+	FReply OnObjectsModify() const;
+	FReply OnObjectsReset() const;
 	FText GetTransformationSummary() const;
-	FText GetTracksSummary() const;
+	
+	//TArray<SNumericDropDown<int>::FNamedValue> GetCameraTracksOptions() const;
 	FFSPEditorEdMode* GetEdMode() const;
 };
