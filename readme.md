@@ -6,7 +6,9 @@ The FSP offers gamemode (just to setup correct pawn), pawn with cinecamera and a
 
 # Setup
 
-## Scene setup
+## Level setup
+Set the GM_FSP as a the game mode in the level. Alternatively create your own Game Mode which inherits from FSPGameMode (c++ class) and edit your variables.
+Open FSP mode (Modes -> FSP) and Initialize FSP.
 
 ### Engine setup
 To allow object tracing and data collection, you need to add a FSPObject trace in settings. 
