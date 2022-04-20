@@ -57,7 +57,7 @@ protected:
 	TWeakObjectPtr<AFSPManager> Manager;
 	TWeakObjectPtr<AFSPPawn> Pawn;
 	TArray<AFSPTrack*> CameraTracks;
-	
+
 	void AddKeyMappings() const;
 	// Camera track panel
 

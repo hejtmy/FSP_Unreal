@@ -42,6 +42,10 @@ private:
 	FReply OnObjectsModify() const;
 	FReply OnObjectsReset() const;
 	FText GetTransformationSummary() const;
+
+	// Transformations
+	FText TransformationGroup;
+	FText TransformationGroupText() const;
 	
 	//TArray<SNumericDropDown<int>::FNamedValue> GetCameraTracksOptions() const;
 	FFSPEditorEdMode* GetEdMode() const;

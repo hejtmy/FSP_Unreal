@@ -20,6 +20,9 @@ public:
 	UFSPObject();
 
 	UPROPERTY(EditAnywhere, Category="FSP|Object")
+	int TransformationGroup;
+	
+	UPROPERTY(EditAnywhere, Category="FSP|Object")
 	FName ObjectName;
 
 	// TRANSFORMATIONS ---------

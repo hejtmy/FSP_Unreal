@@ -58,7 +58,7 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 				] +
 				// -------- CAMERA TRACK CONTROLS -----------------
 				SVerticalBox::Slot()
-				.FillHeight(0.2)
+				.FillHeight(0.4)
 				.HAlign(HAlign_Center)
 				[
 					SNew(SVerticalBox)
@@ -88,13 +88,13 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 						SNullWidget::NullWidget
 						//SNew(SNumericDropDown<int>)
 						//.DropDownValues(FFSPEditorEdModeToolkit::GetCameraTracksOptions())
-					] + 
-					
+					] +
 					SVerticalBox::Slot()
 					[
 						SNullWidget::NullWidget
 					]
 				] +
+				// ------------ FSP object transformations ----------------------
 				SVerticalBox::Slot()
 				.FillHeight(0.3)
 				.HAlign(HAlign_Center)
@@ -108,19 +108,35 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 						.Text(LOCTEXT("FSPEditorEdModeObjectControlsTitleText","Object controls"))
 					] +
 					SVerticalBox::Slot()
+					.FillHeight(0.2)
 					[
-						SNew(SHorizontalBox) +
-						SHorizontalBox::Slot()
-						[
-							SNew(SButton)
-							.Text(LOCTEXT("FSPEditorEdModeObjectControlsResetAllBtn","Reset all objects"))
-							.OnClicked(this, &FFSPEditorEdModeToolkit::OnObjectsReset)
+						SNew(STextBlock)
+						.Text(LOCTEXT("FSPEditorEdModeObjectControlsTransformationTitleText","Transformation control"))
+					] +
+					SVerticalBox::Slot()
+					[
+						SNew(SVerticalBox) +
+						SVerticalBox::Slot()[
+							SNew(SHorizontalBox) +
+							SHorizontalBox::Slot()[
+								SNew(SEditableTextBox)
+								.Text(this, &FFSPEditorEdModeToolkit::TransformationGroupText)
+							]
 						] +
-						SHorizontalBox::Slot()
-						[
-							SNew(SButton)
-							.Text(LOCTEXT("FSPEditorEdModeObjectControlsModifyAllBtn","transform all objects"))
-							.OnClicked(this, &FFSPEditorEdModeToolkit::OnObjectsModify)
+						SVerticalBox::Slot()[
+							SNew(SHorizontalBox) +
+							SHorizontalBox::Slot()
+							[
+								SNew(SButton)
+								.Text(LOCTEXT("FSPEditorEdModeObjectControlsResetAllBtn","Reset all objects"))
+								.OnClicked(this, &FFSPEditorEdModeToolkit::OnObjectsReset)
+							] +
+							SHorizontalBox::Slot()
+							[
+								SNew(SButton)
+								.Text(LOCTEXT("FSPEditorEdModeObjectControlsModifyAllBtn","transform all objects"))
+								.OnClicked(this, &FFSPEditorEdModeToolkit::OnObjectsModify)
+							]
 						]
 					] +
 					SVerticalBox::Slot()
@@ -306,6 +322,10 @@ FReply FFSPEditorEdModeToolkit::OnCameraTrackSelect()
 	 return FReply::Unhandled(); 
 }
 
+FText FFSPEditorEdModeToolkit::TransformationGroupText() const
+{
+	return TransformationGroup;
+}
 /*
 TArray<SNumericDropDown<int>::FNamedValue> FFSPEditorEdModeToolkit::GetCameraTracksOptions() const
 {
