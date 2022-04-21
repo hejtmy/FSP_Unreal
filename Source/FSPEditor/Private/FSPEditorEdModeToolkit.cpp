@@ -121,6 +121,7 @@ void FFSPEditorEdModeToolkit::Init(const TSharedPtr<IToolkitHost>& InitToolkitHo
 							SHorizontalBox::Slot()[
 								SNew(SEditableTextBox)
 								.Text(this, &FFSPEditorEdModeToolkit::TransformationGroupText)
+								.OnTextCommitted(this, &FFSPEditorEdModeToolkit::TransformationGroupTextCommitted)
 							]
 						] +
 						SVerticalBox::Slot()[
@@ -309,7 +310,8 @@ FText FFSPEditorEdModeToolkit::GetCameraTracksSummary() const
 
 FReply FFSPEditorEdModeToolkit::OnObjectsModify() const
 {
-	return GetEdMode()->ApplyObjectsTransformations() ? FReply::Handled() : FReply::Unhandled();
+	const bool TransformAll = TransformationGroup == 0;
+	return GetEdMode()->ApplyObjectsTransformations(TransformAll, TransformationGroup) ? FReply::Handled() : FReply::Unhandled();
 }
 
 FReply FFSPEditorEdModeToolkit::OnObjectsReset() const
@@ -324,8 +326,15 @@ FReply FFSPEditorEdModeToolkit::OnCameraTrackSelect()
 
 FText FFSPEditorEdModeToolkit::TransformationGroupText() const
 {
-	return TransformationGroup;
+	return FText::FromString(FString::FromInt(TransformationGroup));
 }
+
+void FFSPEditorEdModeToolkit::TransformationGroupTextCommitted(const FText& Text, ETextCommit::Type Arg)
+{
+	const FString Str = Text.ToString();
+	TransformationGroup = Str.IsNumeric() ? FCString::Atoi(*Str) : 0;
+}
+
 /*
 TArray<SNumericDropDown<int>::FNamedValue> FFSPEditorEdModeToolkit::GetCameraTracksOptions() const
 {

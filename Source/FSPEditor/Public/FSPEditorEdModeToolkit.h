@@ -12,7 +12,7 @@ class FFSPEditorEdModeToolkit : public FModeToolkit
 public:
 
 	FFSPEditorEdModeToolkit();
-	
+
 	/** FModeToolkit interface */
 	virtual void Init(const TSharedPtr<IToolkitHost>& InitToolkitHost) override;
 
@@ -44,8 +44,9 @@ private:
 	FText GetTransformationSummary() const;
 
 	// Transformations
-	FText TransformationGroup;
+	int TransformationGroup;
 	FText TransformationGroupText() const;
+	void TransformationGroupTextCommitted(const FText& Text, ETextCommit::Type Arg);
 	
 	//TArray<SNumericDropDown<int>::FNamedValue> GetCameraTracksOptions() const;
 	FFSPEditorEdMode* GetEdMode() const;

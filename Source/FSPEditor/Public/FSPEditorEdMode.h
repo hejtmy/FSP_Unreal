@@ -13,7 +13,6 @@ class FFSPEditorEdMode: public FEdMode
 {
 public:
 	const static FEditorModeID EM_FSPEditorEdModeId;
-public:
 	FFSPEditorEdMode();
 	virtual ~FFSPEditorEdMode();
 
@@ -46,7 +45,7 @@ public:
 	TArray<AFSPTrack*> GetCameraTracks() const {return CameraTracks; }
 
 	// Item transformation panel
-	bool ApplyObjectsTransformations();
+	bool ApplyObjectsTransformations(bool TransformAll = true, int TransformationGroup = 0);
 	bool ResetObjectsTransformations();
 	bool GetFSPObjects(TArray<UFSPObject*> &Out) const;
 

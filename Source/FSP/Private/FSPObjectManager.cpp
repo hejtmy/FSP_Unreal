@@ -33,11 +33,11 @@ TArray<UFSPObject*> AFSPObjectManager::GetObjects() const
 	return Result;
 }
 
-void AFSPObjectManager::ApplyTransformations()
+void AFSPObjectManager::ApplyTransformations(bool TransformAll, int TransformationGroup)
 {
 	for (const auto Object : GetObjects())
 	{
-		Object->ApplyTransformations();
+		if(TransformAll || (Object->TransformationGroup == TransformationGroup)) Object->ApplyTransformations();
 	}
 }
 

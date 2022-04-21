@@ -233,14 +233,14 @@ AFSPGameMode* FFSPEditorEdMode::GetGameMode(UWorld* World) const
 	return FSPGameMode;
 }
 
-bool FFSPEditorEdMode::ApplyObjectsTransformations()
+bool FFSPEditorEdMode::ApplyObjectsTransformations(bool TransformAll, int TransformationGroup)
 {
 	if(!IsInitialized())
 	{
 		UE_LOG(FSPEditor, Warning, TEXT("Object manager is not valid."))
 		return false;
 	}
-	ObjectManager->ApplyTransformations();
+	ObjectManager->ApplyTransformations(TransformAll, TransformationGroup);
 	return true;
 }
 

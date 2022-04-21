@@ -25,7 +25,7 @@ public:
 	TArray<UFSPObject*> GetObjects() const;
 	
 	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
-	void ApplyTransformations();
+	void ApplyTransformations(bool TransformAll = true, int TransformationGroup = 0);
 
 	UFUNCTION(BlueprintCallable, Category="FSP|Object", CallInEditor)
 	void ResetTransformations();
