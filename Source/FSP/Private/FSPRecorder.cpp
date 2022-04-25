@@ -206,5 +206,4 @@ void AFSPRecorder::FinishScreenshotting()
 	GetWorldTimerManager().ClearTimer(ScreenshottingHandle);
 	OnScreenshotTaken.RemoveDynamic(this, &AFSPRecorder::LogSceneData);
 	Pawn->TrackRider->ShowControls(true);
-
 }

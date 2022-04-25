@@ -25,10 +25,10 @@ public:
       * @param DrawDebug draws the raycasted rays
       * @return TMap with an object and int32 describing how many rays have struck the object
     **/
-	UFUNCTION(BlueprintCallable, Category="FSP", BlueprintPure=false)
+	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis", BlueprintPure=false)
 	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false,
 		bool DrawDebug = false) const;
-
+	
 	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis")
 	void GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const;
 	
@@ -36,7 +36,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category="FSP")
+	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
+	bool bDrawHits = false;
+	
+	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
+	bool bDrawDebug = false;
+
+	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
+	float DebugLineThickness = 0.1;
+	
+	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
+	bool bPrintHits = false;
+	
+	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
 	float ScanDistance = 1000;
 
 private:

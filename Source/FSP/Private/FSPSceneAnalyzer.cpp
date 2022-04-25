@@ -46,7 +46,7 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 		//while(CurrentScanY < ViewportSize.Y)
 		{
 			FName HitName;
-			DoTraceFromScreen(CurrentScanX, CurrentScanY, ScanDistance, DrawHits, DrawDebug, Player, HitName);
+			DoTraceFromScreen(CurrentScanX, CurrentScanY, ScanDistance, bDrawHits, bDrawDebug, Player, HitName);
 			if(HitName.IsNone())
 			{
 				Out.Add(FName(TEXT("nothing")), Out[FName(TEXT("nothing"))] + 1);
@@ -97,7 +97,7 @@ void UFSPSceneAnalyzer::DoTraceFromScreen(float X, float Y, float Distance, bool
 	if(DrawDebug)
 	{
 		DrawDebugLine(GetWorld(), WorldLocation, TraceEnd, FColor::Red,
-		false, 1, 0, 1);
+		false, 0.5, 0, DebugLineThickness);
 	}
 
 	if(!GetWorld()->LineTraceSingleByChannel(HitObject, WorldLocation, TraceEnd,
@@ -110,6 +110,6 @@ void UFSPSceneAnalyzer::DoTraceFromScreen(float X, float Y, float Distance, bool
 	if(DrawHits)
 	{
 		DrawDebugLine(GetWorld(), WorldLocation, TraceEnd, FColor::Green,
-		false, 1, 0, 1);
+		false, 0.5, 0, DebugLineThickness);
 	}
 }
