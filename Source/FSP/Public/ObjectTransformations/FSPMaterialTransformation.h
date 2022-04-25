@@ -28,7 +28,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformations")
 	UMaterialInterface* MaterialNew;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSP|Transofrmations")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP|Transformations")
 	UMaterialInterface* MaterialDefault;
 
 };

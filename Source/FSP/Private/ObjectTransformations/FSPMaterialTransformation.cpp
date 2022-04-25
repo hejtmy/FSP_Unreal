@@ -16,7 +16,7 @@ void UFSPMaterialTransformation::ChangeState()
 	Super::ChangeState();
 	if(Mesh != nullptr)
 	{
-		MaterialDefault = Mesh->GetMaterial(0);
+		//MaterialDefault = Mesh->GetMaterial(0);
 		Mesh->SetMaterial(0, MaterialNew);
 	}
 }
