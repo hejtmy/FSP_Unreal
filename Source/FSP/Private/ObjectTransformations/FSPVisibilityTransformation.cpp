@@ -18,16 +18,28 @@ void UFSPVisibilityTransformation::BeginPlay()
 	ResetState();
 }
 
+void UFSPVisibilityTransformation::ChangeVisibility(bool bVisible)
+{
+	GetOwner()->SetActorHiddenInGame(!bVisible);
+	GetOwner()->SetIsTemporarilyHiddenInEditor(!bVisible);
+	TArray<UStaticMeshComponent*> Components;
+	GetOwner()->GetComponents<UStaticMeshComponent>(Components);
+	GetOwner()->SetActorEnableCollision(bVisible);
+	for (auto Component : Components)
+	{
+		Component->CastShadow = bVisible;
+	}
+}
+
 void UFSPVisibilityTransformation::ChangeState()
 {
 	Super::ChangeState();
-	GetOwner()->SetActorHiddenInGame(bShowOnStart);
-	GetOwner()->SetIsTemporarilyHiddenInEditor(bShowOnStart);
+	ChangeVisibility(!bShowOnStart);
 }
 
 void UFSPVisibilityTransformation::ResetState()
 {
 	Super::ResetState();
-	GetOwner()->SetActorHiddenInGame(!bShowOnStart);
-	GetOwner()->SetIsTemporarilyHiddenInEditor(!bShowOnStart);
+	ChangeVisibility(bShowOnStart);
 }
+

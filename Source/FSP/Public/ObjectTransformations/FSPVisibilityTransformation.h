@@ -27,5 +27,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FSP|Transformations")
 	bool bShowOnStart = false;
-public:	
+
+private:
+	void ChangeVisibility(bool bVisible);
 };
