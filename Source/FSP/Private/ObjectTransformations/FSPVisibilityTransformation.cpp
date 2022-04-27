@@ -15,7 +15,6 @@ UFSPVisibilityTransformation::UFSPVisibilityTransformation()
 void UFSPVisibilityTransformation::BeginPlay()
 {
 	Super::BeginPlay();
-	ResetState();
 }
 
 void UFSPVisibilityTransformation::ChangeVisibility(bool bVisible)
