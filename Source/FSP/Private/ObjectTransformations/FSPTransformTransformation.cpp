@@ -13,13 +13,11 @@ UFSPTransformTransformation::UFSPTransformTransformation()
 void UFSPTransformTransformation::BeginPlay()
 {
 	Super::BeginPlay();
-	SetOriginalValues();
 }
 
 void UFSPTransformTransformation::ChangeState()
 {
 	Super::ChangeState();
-	SetOriginalValues();
 	if(bChangeLocation)
 	{
 		GetOwner()->SetActorLocation(TargetLocation);
@@ -47,5 +45,4 @@ void UFSPTransformTransformation::SetOriginalValues()
 	OriginalLocation = GetOwner()->GetActorLocation();
 	OriginalRotation = GetOwner()->GetActorRotation();
 	OriginalScale = GetOwner()->GetActorScale();
-
 }

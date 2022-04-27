@@ -35,16 +35,19 @@ protected:
 	bool bChangeRotation = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
 	bool bChangeScale = false;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
+	FVector OriginalLocation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
+	FVector OriginalScale;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="FSP|Transformation")
+	FRotator OriginalRotation;
+	
 public:
 	// Transformation interface implementation -----
 	void ChangeState() override;
 	void ResetState() override;
 	
-private:
-	FVector OriginalLocation;
-	FVector OriginalScale;
-	FRotator OriginalRotation;
-
+	UFUNCTION(BlueprintCallable, Category="FSP|Transformation", CallInEditor)
 	void SetOriginalValues();
 };
