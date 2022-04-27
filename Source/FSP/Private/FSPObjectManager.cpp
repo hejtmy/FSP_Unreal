@@ -52,6 +52,7 @@ void AFSPObjectManager::ResetTransformations()
 void AFSPObjectManager::CollectAllLevelObjects()
 {
 	TArray<AActor*> Actors;
+	Objects.Empty();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Actors);
 	for (const auto Actor : Actors)
 	{
