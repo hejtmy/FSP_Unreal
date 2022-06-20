@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "FSPRecorder.h"
 
 #include "HighResScreenshot.h"
@@ -146,20 +145,6 @@ void AFSPRecorder::CreateScreenshots(AFSPLogger* Logging)
 	
 	ResetSceneRecordingIndex();
 
-	FTimerDelegate NextFuncDelegate;
-	NextFuncDelegate.BindLambda([&](){
-		const float newTrackPosition = Pawn->TrackRider->TrackPosition + 1.0/static_cast<float>(nScreenshots);
-		if(newTrackPosition > 1)
-		{
-			FinishScreenshotting();
-		}
-		else
-		{
-			Pawn->TrackRider->SetTrackPosition(newTrackPosition);
-			CreateScreenshot();
-		}
-	});
-
 	OnScreenshotTaken.AddDynamic(this, &AFSPRecorder::LogSceneData);
 	GetWorldTimerManager().SetTimer(ScreenshottingHandle, this, &AFSPRecorder::CreateNextScreenshot,
 		ScreenshotDelay, true, 0.0f);
@@ -182,11 +167,11 @@ void AFSPRecorder::CreateNextScreenshot()
 
 void AFSPRecorder::CreateScreenshot()
 {
-	//const FString Command = "HighResShot 2";
-	//GetWorld()->Exec(GetWorld(), *Command);
 	GetHighResScreenshotConfig().SetResolution(ScreenshotWidth, ScreenshotHeight);
-	//GetHighResScreenshotConfig().FilenameOverride = FString("new filename");
-	FScreenshotRequest::RequestScreenshot(false);
+	if(this->bSaveScreenshots)
+	{
+		FScreenshotRequest::RequestScreenshot(false);
+	}
 	OnScreenshotTaken.Broadcast();
 	UE_LOG(LogTemp, Display, TEXT("Screenshot taken"));
 }

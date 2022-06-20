@@ -19,15 +19,18 @@ public:
 	UFSPSceneAnalyzer();
 
 	/**Analyses scene and counts hwat portion of a screen each FSP object takes with given precision.
-      * @param Player pointer to a player object from which the raytracing originates. The player needs to have a valid camera
-      * @param Precision how many rays to shoot (
-      * @param DrawHits debug purpose, set true to visualise hits of UFSPObjects
-      * @param DrawDebug draws the raycasted rays
-      * @return TMap with an object and int32 describing how many rays have struck the object
-    **/
-	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis", BlueprintPure=false)
+	  * @param Player pointer to a player object from which the raytracing originates. The player needs to have a valid camera
+	  * @param Precision how many rays to shoot (
+	  * @param DrawHits debug purpose, set true to visualise hits of UFSPObjects
+	  * @param DrawDebug draws the raycasted rays
+	  * @return TMap with an object and int32 describing how many rays have struck the object
+	**/
+	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis", BlueprintPure=false, CallInEditor)
 	TMap<FName, int32> AnalyzeScene(APlayerController* Player, int32 Precision, bool DrawHits = false,
-		bool DrawDebug = false) const;
+		bool DrawDebug = false, bool PrintReport = false) const;
+
+	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis", CallInEditor)
+	void TestAnalyzeScene() const;	
 	
 	UFUNCTION(BlueprintCallable, Category="FSP|SceneAnalysis")
 	void GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const;
@@ -50,6 +53,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
 	float ScanDistance = 1000;
+
+	UPROPERTY(EditAnywhere, Category="FSP|SceneAnalysis")
+	int32 DefaultPrecision = 32;
 
 private:
 	void DoTraceFromScreen(float X, float Y, float Distance, bool DrawHits, bool DrawDebug,

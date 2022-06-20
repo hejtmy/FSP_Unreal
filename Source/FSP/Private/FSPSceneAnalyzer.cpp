@@ -18,7 +18,7 @@ void UFSPSceneAnalyzer::BeginPlay()
 }
 
 TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, int32 Precision,
-	bool DrawHits, bool DrawDebug) const
+	bool DrawHits, bool DrawDebug, bool PrintReport) const
 {
 	TMap<FName, int32> Out;
 
@@ -43,8 +43,8 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 	for(int32 i = 0; i <= Precision; i++)
 	{
 		for(int32 j = 0; j <= Precision; j++)
-		//while(CurrentScanY < ViewportSize.Y)
-		{
+			//while(CurrentScanY < ViewportSize.Y)
+			{
 			FName HitName;
 			DoTraceFromScreen(CurrentScanX, CurrentScanY, ScanDistance, bDrawHits, bDrawDebug, Player, HitName);
 			if(HitName.IsNone())
@@ -58,12 +58,26 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 			}
 			CurrentScanY += ViewportSize.Y/static_cast<float>(Precision);
 			CurrentScanY = FMath::Clamp<float>(CurrentScanY, 0, ViewportSize.Y);
-		}
+			}
 		CurrentScanY = 0;
 		CurrentScanX += ViewportSize.X/static_cast<float>(Precision);
 		CurrentScanX = FMath::Clamp<float>(CurrentScanX, 0, ViewportSize.X);
 	}
+	
+	if(PrintReport)
+	{
+		for (auto Result : Out)
+		{
+			UE_LOG(LogTemp, Display, TEXT("%s:%d"), *Result.Key.ToString(), Result.Value);
+		}
+	}
 	return Out;
+}
+
+void UFSPSceneAnalyzer::TestAnalyzeScene() const
+{
+	APlayerController* Player = GetWorld()->GetFirstPlayerController();
+	AnalyzeScene(Player, this->DefaultPrecision, this->bDrawHits, this->bDrawDebug, this->bPrintHits);
 }
 
 void UFSPSceneAnalyzer::GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const

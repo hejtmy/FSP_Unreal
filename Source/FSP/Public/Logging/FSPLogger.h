@@ -25,6 +25,9 @@ public:
 	static FString LocationToString(FVector Location);
 	static FString ScreenPositionToString(FVector2D& Position);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool ShouldWrite; 
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;

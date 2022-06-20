@@ -96,7 +96,6 @@ bool AFSPManager::ValidateRecorder()
 	if(IsValid(Recorder)) return true;
 	UE_LOG(FSP, Warning, TEXT("Recorder actor is not valid"));
 	return false;
-	
 }
 
 void AFSPManager::TakeScreenshots_Implementation()

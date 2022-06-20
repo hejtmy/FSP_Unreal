@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Recording")
 	int32 SceneAnalysisLoggingFrequency = 50;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Recording")
+	bool bSaveScreenshots = false;
+
 	/**
 	 *@brief Starts recording and logging positional and scene information with passed logger
 	 **/
@@ -48,11 +51,9 @@ public:
 	/** Starts recording without any logging **/
 	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
 	void StartRecordingWithoutLogging();
-
 	
 	UFUNCTION(BlueprintCallable, Category="FSP|Recording")
 	void LogSceneData();
-
 	
 	UFUNCTION(BlueprintCallable, Category="FSP")
 	void StopRecording();
