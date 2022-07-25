@@ -8,7 +8,11 @@
 // Sets default values
 UFSPSceneAnalyzer::UFSPSceneAnalyzer()
 {
-	
+}
+
+void UFSPSceneAnalyzer::SetRecorder(AFSPRecorder* RecorderOrig)
+{
+	Recorder = RecorderOrig;
 }
 
 // Called when the game starts or when spawned
@@ -17,7 +21,13 @@ void UFSPSceneAnalyzer::BeginPlay()
 	Super::BeginPlay();
 }
 
-TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, int32 Precision,
+TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(AFSPPawn* Player, int32 Precision,
+	bool DrawHits, bool DrawDebug, bool PrintReport) const
+{
+	return AnalyzeSceneTracing(Player->PlayerController(), Precision, DrawHits, DrawDebug, PrintReport);
+}
+
+TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeSceneTracing(APlayerController* Player, int32 Precision,
 	bool DrawHits, bool DrawDebug, bool PrintReport) const
 {
 	TMap<FName, int32> Out;
@@ -74,18 +84,38 @@ TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeScene(APlayerController* Player, in
 	return Out;
 }
 
+TMap<FName, int32> UFSPSceneAnalyzer::AnalyzeSceneScreenRadius(AFSPPawn* Player, bool PrintReport) const
+{
+	TMap<FName, int32> Out;
+	auto Objects = Recorder->ObjectManager->GetObjects();
+	for (const auto Result : Objects)
+	{
+		const float Radius = GetObjectScreenRadius(Result->GetOwner(), Player);
+		Out.Add(Result->ObjectName, Radius);
+	}
+	
+	if(PrintReport)
+	{
+		for (auto Result : Out)
+		{
+			UE_LOG(LogTemp, Display, TEXT("%s:%d"), *Result.Key.ToString(), Result.Value);
+		}
+	}
+	return Out;
+}
+
 void UFSPSceneAnalyzer::TestAnalyzeScene() const
 {
 	APlayerController* Player = GetWorld()->GetFirstPlayerController();
-	AnalyzeScene(Player, this->DefaultPrecision, this->bDrawHits, this->bDrawDebug, this->bPrintHits);
+	AnalyzeSceneTracing(Player, this->DefaultPrecision, this->bDrawHits, this->bDrawDebug, this->bPrintHits);
 }
 
-void UFSPSceneAnalyzer::GetScreenPosition(APlayerController* Player, UFSPObject* Object, FVector2D& Out) const
+void UFSPSceneAnalyzer::GetScreenPosition(AFSPPawn* Player, UFSPObject* Object, FVector2D& Out) const
 {
 	const FVector Position = Object->GetOwner()->GetActorLocation();
 	FVector2D ViewportSize;
 	GEngine->GameViewport->GetViewportSize(ViewportSize);
-	if(Player->ProjectWorldLocationToScreen(Position, Out))
+	if(Player->PlayerController()->ProjectWorldLocationToScreen(Position, Out))
 	{
 		Out = Out/ViewportSize;
 	}
@@ -126,4 +156,32 @@ void UFSPSceneAnalyzer::DoTraceFromScreen(float X, float Y, float Distance, bool
 		DrawDebugLine(GetWorld(), WorldLocation, TraceEnd, FColor::Green,
 		false, 0.5, 0, DebugLineThickness);
 	}
+}
+
+float UFSPSceneAnalyzer::GetObjectScreenRadius(AActor* InActor, AFSPPawn* Player)
+{
+	float ScreenRadius;
+	int32 Width, Height;
+	FVector ViewLocation;
+	FRotator ViewRotation; // Not Used, but required for Function call
+	float CamFOV = Player->Camera->FieldOfView; 
+	/* Get the size of the viewport, and the player cameras location. */
+	Player->PlayerController()->GetViewportSize(Width, Height);
+	Player->PlayerController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
+#if WITH_EDITOR
+	float ScreenPerc = IConsoleManager::Get().FindTConsoleVariableDataFloat(TEXT("r.SCreenPercentage"))->
+		GetValueOnGameThread() / 100.0f;
+	Width *= ScreenPerc;
+	Height *= ScreenPerc;
+#endif WITH_EDITOR
+
+	/* Easy Way To Return The Size, Create a vector and scale it. Alternative would be to use FMath::Max3 */
+	float SRad = FVector2D(Width, Height).Size();
+	float BoundingRadius = InActor->GetRootComponent()->Bounds.SphereRadius;
+	float DistanceToObject = FVector(InActor->GetActorLocation() - ViewLocation).Size();
+
+	/* Get Projected Screen Radius */
+	ScreenRadius = FMath::Atan(BoundingRadius / DistanceToObject);
+	ScreenRadius *= SRad / FMath::DegreesToRadians(CamFOV);
+	return ScreenRadius;
 }

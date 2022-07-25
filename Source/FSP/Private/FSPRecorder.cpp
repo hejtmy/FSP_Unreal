@@ -16,6 +16,7 @@ AFSPRecorder::AFSPRecorder()
 void AFSPRecorder::BeginPlay()
 {
 	Super::BeginPlay();
+	SceneAnalyzer->SetRecorder(this);
 }
 
 // Called every frame
@@ -60,20 +61,20 @@ void AFSPRecorder::StartRecordingWithoutLogging()
 void AFSPRecorder::LogSceneData()
 {
 	Logger->LogPosition(Pawn, iSceneRecording);
-	LogSceneAnalysis();
-	LogObjectPositions();
+	LogSceneAnalysis(iSceneRecording);
+	LogObjectPositions(iSceneRecording);
 	
 	UE_LOG(LogTemp, Display, TEXT("Data have been logged"));
 	iSceneRecording += 1;
 }
 
-void AFSPRecorder::LogSceneAnalysis()
+void AFSPRecorder::LogSceneAnalysis(int Index) const
 {
-	const TMap<FName, int32> Results = SceneAnalyzer->AnalyzeScene(Cast<APlayerController>(Pawn->Controller), Precision);
-	Logger->LogSceneAnalysis(Results, iSceneRecording);
+	const TMap<FName, int32> Results = SceneAnalyzer->AnalyzeScene(Pawn, Precision);
+	Logger->LogSceneAnalysis(Results, Index);
 }
 
-void AFSPRecorder::LogObjectPositions()
+void AFSPRecorder::LogObjectPositions(int Index) const
 {
 	TArray<UFSPObject*> Objects;
 	if(ObjectManager != nullptr)
@@ -89,10 +90,10 @@ void AFSPRecorder::LogObjectPositions()
 	{
 		// gets the positiosn
 		FVector2D Out;
-		SceneAnalyzer->GetScreenPosition(Cast<APlayerController>(Pawn->Controller), Obj, Out);
+		SceneAnalyzer->GetScreenPosition(Pawn, Obj, Out);
 		// logs the position
 		FString Name = Obj->ObjectName.ToString();
-		Logger->LogObjectScreenPosition(Out, Name, iSceneRecording);
+		Logger->LogObjectScreenPosition(Out, Name, Index);
 	}
 }
 
@@ -172,8 +173,8 @@ void AFSPRecorder::CreateScreenshot()
 	{
 		FScreenshotRequest::RequestScreenshot(false);
 	}
-	OnScreenshotTaken.Broadcast();
 	UE_LOG(LogTemp, Display, TEXT("Screenshot taken"));
+	OnScreenshotTaken.Broadcast();
 }
 
 void AFSPRecorder::StopScreenshotting() 

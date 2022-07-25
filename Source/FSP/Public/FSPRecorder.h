@@ -41,7 +41,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FSP|Recording")
 	bool bSaveScreenshots = false;
-
+	
 	/**
 	 *@brief Starts recording and logging positional and scene information with passed logger
 	 **/
@@ -114,8 +114,8 @@ private:
 	float LastScreenshotTrack;
 	void CreateNextScreenshot();
 	void FinishScreenshotting();
-	void LogSceneAnalysis();
-	void LogObjectPositions();
+	void LogSceneAnalysis(int Index) const;
+	void LogObjectPositions(int Index) const;
 	
 	// Logging
 	FTimerHandle SceneAnalysisLoggingHandle;

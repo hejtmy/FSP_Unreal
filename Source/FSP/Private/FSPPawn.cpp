@@ -38,3 +38,8 @@ void AFSPPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+APlayerController* AFSPPawn::PlayerController()
+{
+    return(Cast<APlayerController>(this->Controller));
+}
+

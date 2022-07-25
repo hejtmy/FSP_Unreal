@@ -37,5 +37,7 @@ public:
 
     UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
     USceneComponent* SceneRoot;
-
+    
+	UFUNCTION(BlueprintGetter)
+	APlayerController* PlayerController();
 };
